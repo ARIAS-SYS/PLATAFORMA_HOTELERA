@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="plataformaUP" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.emergentes.entities.Habitacion</class>
+    <class>com.emergentes.entities.TipoHabitacion</class>
+    <class>com.emergentes.entities.Reserva</class>
+    <class>com.emergentes.entities.Oferta</class>
+    <class>com.emergentes.entities.Usuario</class>
+    <class>com.emergentes.entities.Favorito</class>
+    <class>com.emergentes.entities.Hotel</class>
+    <class>com.emergentes.entities.Comodidad</class>
+    <class>com.emergentes.entities.Ubicacion</class>
+    <class>com.emergentes.entities.Rol</class>
+    <class>com.emergentes.entities.ComodidadHabitacion</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bd_plataforma_hotel?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+    </properties>
+  </persistence-unit>
+</persistence>
