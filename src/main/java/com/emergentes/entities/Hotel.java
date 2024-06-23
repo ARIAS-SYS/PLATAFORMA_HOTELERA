@@ -41,8 +41,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Hotel.findByPais", query = "SELECT h FROM Hotel h WHERE h.pais = :pais"),
     @NamedQuery(name = "Hotel.findByDepartamento", query = "SELECT h FROM Hotel h WHERE h.departamento = :departamento"),
     @NamedQuery(name = "Hotel.findByCiudad", query = "SELECT h FROM Hotel h WHERE h.ciudad = :ciudad"),
-    @NamedQuery(name = "Hotel.findByDescripcionUbi", query = "SELECT h FROM Hotel h WHERE h.descripcionUbi = :descripcionUbi"),
-    @NamedQuery(name = "Hotel.findByIdUbi", query = "SELECT h FROM Hotel h WHERE h.idUbi = :idUbi")})
+    @NamedQuery(name = "Hotel.findByDescripcionUbi", query = "SELECT h FROM Hotel h WHERE h.descripcionUbi = :descripcionUbi")})
 public class Hotel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -94,8 +93,6 @@ public class Hotel implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "descripcion_ubi")
     private String descripcionUbi;
-    @Column(name = "id_ubi")
-    private Integer idUbi;
     @OneToMany(mappedBy = "idHotel")
     private List<Favorito> favoritoList;
     @OneToMany(mappedBy = "idHotel")
@@ -223,14 +220,6 @@ public class Hotel implements Serializable {
 
     public void setDescripcionUbi(String descripcionUbi) {
         this.descripcionUbi = descripcionUbi;
-    }
-
-    public Integer getIdUbi() {
-        return idUbi;
-    }
-
-    public void setIdUbi(Integer idUbi) {
-        this.idUbi = idUbi;
     }
 
     public List<Favorito> getFavoritoList() {

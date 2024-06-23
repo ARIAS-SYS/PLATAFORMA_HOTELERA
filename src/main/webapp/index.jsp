@@ -19,6 +19,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />  
 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- funciones locales -->
+    <script src="js/funciones.js" type="text/javascript"></script>
 
 
     <!-- estilos locales -->
@@ -29,30 +34,11 @@
 <body class="bg-[#0F1522]">
 
     <header>
-
-        <nav class="absolute top-0 left-0 right-0 px-5 py-[0.8rem] border-b-2 border-slate-700 lg:px-20 flex justify-between">
-            <div class="">
-                <a class="text-gray-300 text-2xl font-semibold" href="MainController?action=index">ReservaYa</a>
-            </div>
-            <div class="flex gap-3 items-center">
-                <div>
-                    <a href="#" >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
-                            class="size-[1.5rem] text-[#8F9EB3] hover:text-[#CBD5E1]">
-                            <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
-                </div>
-                <button class="text-[#8F9EB3] hover:text-[#CBD5E1] flex gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
-                        class="size-[1.5rem]">
-                        <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
-                    </svg>
-                    <span>Arias</span>
-                </button>
-            </div>
-        </nav>
-
+        
+        <jsp:include page="layout/navbar.jsp">
+            <jsp:param name="posicion" value="absolute"/>
+        </jsp:include>
+        
         <div class="banner flex justify-center items-center">
             <div class="w-[50%] text-center">
                 <h1 class="text-3xl text-white font-bold py-5 lg:text-6xl">ReservaYa</h1>
@@ -140,7 +126,7 @@
                 <c:forEach var="item" items="${hoteles}">
                     
                     <!-- card 1 -->
-                    <a href="#" class="w-[18rem] bg-[#8F9EB31C] hover:bg-[#2A3345] rounded-md mb-5">
+                    <a href="MainController?action=hotel&id=${item.id}" class="w-[18rem] bg-[#8F9EB31C] hover:bg-[#2A3345] rounded-md mb-5">
                         <img class="w-full h-[10rem] rounded-t-md object-cover object-center" src="images/${item.foto}" alt="">
                         <div class="p-4 flex w-full justify-between">
                             <div class="space-y-1">
@@ -152,11 +138,32 @@
                                 </p>
                             </div>
                             <div>
-                                <button>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-                                        class="size-[1.5rem] text-[#8F9EB3] hover:text-[#CBD5E1]">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                                    </svg>
+                                <button class="favorito" data-hotel="${item.id}">
+                                    
+                                    <c:set var="esFavorito" value="false" />
+                            
+                                    <c:forEach var="favorito" items="${item.favoritoList}">
+                                        <c:if test="${favorito.idUsuario.id == usuario.id}">
+                                            <c:set var="esFavorito" value="true" />
+                                        </c:if>
+                                    </c:forEach>
+                                    
+                                    <c:if test="${esFavorito == true}">
+                                        <div class="esfavorito">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
+                                                class="size-[1.5rem] text-[#D91C58] cursor-pointer">
+                                                <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                                            </svg>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${esFavorito == false}">
+                                        <div class="noFavorito">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                                                class="size-[1.5rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                            </svg>
+                                        </div>
+                                    </c:if>
                                 </button>
                             </div>
 
@@ -179,33 +186,40 @@
 
                 <c:forEach var="item" items="${ofertas}">
                     
-                    <!-- card 1 -->
-                    <a href="#" class="w-[18rem] bg-[#8F9EB31C] hover:bg-[#2A3345] rounded-md mb-5">
-                        <img class="w-full h-[12rem] rounded-t-md object-cover object-center" src="${item.foto}" alt="">
-                        <div class="p-4 w-full">
-                            <div class="space-y-1">
-                                <h3 class="text-white font-semibold text-lg">
-                                    ${item.idHotel.nombre}
-                                </h3>
-                                <p class="text-gray-400 text-sm">
-                                    ${item.descripcion}
-                                </p>
-                                <span class="bg-[#FE0000] text-gray-300 font-bold text-[0.7rem] inline-block p-1 px-2 my-2 rounded-full">
-                                    ${item.descuento}% de descuento
-                                </span>
-                                <h4 class="text-base text-gray-300 font-semibold">
-                                    ${item.titulo}
-                                </h4>
-                                <span class="block text-gray-400 text-sm text-center">
-                                    Del <fmt:formatDate value="${item.fechaInicio}" pattern="dd" /> de
-                                    <fmt:formatDate value="${item.fechaInicio}" pattern="MMMM" /> al
-                                    <fmt:formatDate value="${item.fechaFin}" pattern="dd" /> de
-                                    <fmt:formatDate value="${item.fechaFin}" pattern="MMMM" />
-                                </span>
-                            </div>
+                    <c:if test="${item.estado=='En Curso'}">
+                    
+                        <c:set var="hotelNombre" value="${item.idHotel.nombre}" />
+                        <c:set var="hotelId" value="${item.idHotel.id}" />
 
-                        </div>
-                    </a>
+                        <a href="MainController?action=hotel&id=${hotelId}" class="w-[18rem] bg-[#8f9eb31c] hover:bg-[#2A3345] rounded-md mb-5">
+                            <div class="cursor-pointer">
+                                <img class="w-full h-[12rem] rounded-t-md object-cover" src="${item.foto}" alt="">
+                                <div class="p-4 textPart lg:flex w-full justify-between ">
+                                    <div class="space-y-1">
+                                        <h3 class="font-semibold text-lg text-white">                               
+                                            ${hotelNombre}
+                                        </h3>
+                                        <p class="text-gray-400 text-sm">
+                                            ${item.descripcion}
+                                        </p>
+                                        <span class="bg-[#FE0000] text-gray-300 text-[0.7rem] font-bold inline-block p-1 my-2 rounded-2xl">
+                                            ${item.descuento}% de descuento
+                                        </span>
+                                        <p class=" text-base text-gray-300 font-semibold block">
+                                            ${item.titulo}
+                                        </p>               
+                                        <span class="block text-gray-400 text-sm text-center ">
+                                            Del <fmt:formatDate value="${item.fechaInicio}" pattern="dd" /> de
+                                            <fmt:formatDate value="${item.fechaInicio}" pattern="MMMM" /> al
+                                            <fmt:formatDate value="${item.fechaFin}" pattern="dd" /> de
+                                            <fmt:formatDate value="${item.fechaFin}" pattern="MMMM" />
+                                        </span>   
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </c:if>
                 
                 </c:forEach>
 
