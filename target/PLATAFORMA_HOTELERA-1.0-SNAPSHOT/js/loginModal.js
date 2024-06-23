@@ -17,7 +17,11 @@
             },
             success: function(response) {
                 if (response.sessionExists) {
-                   window.location.href = 'MainController?action=cliente'; 
+                    if(response.isCliente){
+                        window.location.href = 'MainController?action=cliente';                         
+                    }else{
+                        window.location.href = 'MainController?action=propietario';                         
+                    }
                 }else{
                     modalSesion.classList.remove('hidden');
                 }

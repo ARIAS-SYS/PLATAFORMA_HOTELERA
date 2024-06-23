@@ -59,6 +59,10 @@ public class MainController extends HttpServlet {
                 request.setAttribute("usuario", usuario);
                 request.getRequestDispatcher("cliente/perfil_cliente.jsp").forward(request, response);
                 break;
+            case "propietario":
+                request.setAttribute("usuario", usuario);
+                request.getRequestDispatcher("propietario/perfil_propietario.jsp").forward(request, response);
+                break;
         }
 
     }
@@ -74,12 +78,20 @@ public class MainController extends HttpServlet {
             case "sessionExist":
                 if (session.getAttribute("login") == "OK") {
                     
+                    boolean isCliente = true;
+                    Usuario usuario = (Usuario) session.getAttribute("usuario");
+                    
+                    if(usuario.getIdRol().getId()==2){
+                        isCliente = false;
+                    }
+
                     // Devolver respuesta JSON
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
 
                     PrintWriter out = response.getWriter();
-                    out.print("{\"sessionExists\": " + true + "}");
+                    out.print("{\"sessionExists\": " + true + ", \"isCliente\": " + isCliente + "}");
+
                     out.flush();
                 }else{
                     
