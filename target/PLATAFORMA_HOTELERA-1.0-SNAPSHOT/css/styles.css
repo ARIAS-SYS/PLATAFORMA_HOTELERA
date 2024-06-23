@@ -1,0 +1,32 @@
+.banner{
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(
+        rgba(0, 0, 0, .9),
+        rgba(0, 0, 0, .2)
+    ),
+    url("https://cdn.pixabay.com/photo/2018/10/02/22/29/dubai-3720069_1280.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;   
+
+}
+
+::-webkit-scrollbar{
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track{
+    background: #0F172A;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background: #4166717A;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background: #344058;
+}

@@ -65,14 +65,6 @@ public class Reserva implements Serializable {
     private Habitacion idHabit;
 
     public Reserva() {
-        this.id = 0;
-        this.fechaReserva = new Date();
-        this.fechaInicio = new Date();
-        this.fechaFin = new Date();
-        this.totalPrecio = 0L;
-        this.estado = "";
-        this.idUsuario = new Usuario();
-        this.idHabit = new Habitacion();
     }
 
     public Reserva(Integer id) {

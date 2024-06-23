@@ -5,7 +5,6 @@
 package com.emergentes.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -65,15 +64,6 @@ public class Usuario implements Serializable {
     private List<Reserva> reservaList;
 
     public Usuario() {
-        this.id = 0;
-        this.nombre = "";
-        this.email = "";
-        this.password = "";
-        this.activo = 0;
-        this.favoritoList = new ArrayList<Favorito>();
-        this.hotelList = new ArrayList<Hotel>();
-        this.idRol = new Rol();
-        this.reservaList = new ArrayList<Reserva>();
     }
 
     public Usuario(Integer id) {

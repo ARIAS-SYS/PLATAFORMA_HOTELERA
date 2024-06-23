@@ -9,14 +9,13 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.emergentes.entities.Ubicacion;
 import com.emergentes.entities.Usuario;
 import com.emergentes.entities.Favorito;
 import java.util.ArrayList;
 import java.util.List;
+import com.emergentes.entities.Oferta;
 import com.emergentes.entities.Habitacion;
 import com.emergentes.entities.Hotel;
-import com.emergentes.entities.Oferta;
 import com.emergentes.jpa.exceptions.NonexistentEntityException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -40,21 +39,16 @@ public class HotelJpaController implements Serializable {
         if (hotel.getFavoritoList() == null) {
             hotel.setFavoritoList(new ArrayList<Favorito>());
         }
-        if (hotel.getHabitacionList() == null) {
-            hotel.setHabitacionList(new ArrayList<Habitacion>());
-        }
         if (hotel.getOfertaList() == null) {
             hotel.setOfertaList(new ArrayList<Oferta>());
+        }
+        if (hotel.getHabitacionList() == null) {
+            hotel.setHabitacionList(new ArrayList<Habitacion>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Ubicacion idUbi = hotel.getIdUbi();
-            if (idUbi != null) {
-                idUbi = em.getReference(idUbi.getClass(), idUbi.getId());
-                hotel.setIdUbi(idUbi);
-            }
             Usuario idUser = hotel.getIdUser();
             if (idUser != null) {
                 idUser = em.getReference(idUser.getClass(), idUser.getId());
@@ -66,23 +60,19 @@ public class HotelJpaController implements Serializable {
                 attachedFavoritoList.add(favoritoListFavoritoToAttach);
             }
             hotel.setFavoritoList(attachedFavoritoList);
-            List<Habitacion> attachedHabitacionList = new ArrayList<Habitacion>();
-            for (Habitacion habitacionListHabitacionToAttach : hotel.getHabitacionList()) {
-                habitacionListHabitacionToAttach = em.getReference(habitacionListHabitacionToAttach.getClass(), habitacionListHabitacionToAttach.getId());
-                attachedHabitacionList.add(habitacionListHabitacionToAttach);
-            }
-            hotel.setHabitacionList(attachedHabitacionList);
             List<Oferta> attachedOfertaList = new ArrayList<Oferta>();
             for (Oferta ofertaListOfertaToAttach : hotel.getOfertaList()) {
                 ofertaListOfertaToAttach = em.getReference(ofertaListOfertaToAttach.getClass(), ofertaListOfertaToAttach.getId());
                 attachedOfertaList.add(ofertaListOfertaToAttach);
             }
             hotel.setOfertaList(attachedOfertaList);
-            em.persist(hotel);
-            if (idUbi != null) {
-                idUbi.getHotelList().add(hotel);
-                idUbi = em.merge(idUbi);
+            List<Habitacion> attachedHabitacionList = new ArrayList<Habitacion>();
+            for (Habitacion habitacionListHabitacionToAttach : hotel.getHabitacionList()) {
+                habitacionListHabitacionToAttach = em.getReference(habitacionListHabitacionToAttach.getClass(), habitacionListHabitacionToAttach.getId());
+                attachedHabitacionList.add(habitacionListHabitacionToAttach);
             }
+            hotel.setHabitacionList(attachedHabitacionList);
+            em.persist(hotel);
             if (idUser != null) {
                 idUser.getHotelList().add(hotel);
                 idUser = em.merge(idUser);
@@ -96,15 +86,6 @@ public class HotelJpaController implements Serializable {
                     oldIdHotelOfFavoritoListFavorito = em.merge(oldIdHotelOfFavoritoListFavorito);
                 }
             }
-            for (Habitacion habitacionListHabitacion : hotel.getHabitacionList()) {
-                Hotel oldIdHotelHabOfHabitacionListHabitacion = habitacionListHabitacion.getIdHotelHab();
-                habitacionListHabitacion.setIdHotelHab(hotel);
-                habitacionListHabitacion = em.merge(habitacionListHabitacion);
-                if (oldIdHotelHabOfHabitacionListHabitacion != null) {
-                    oldIdHotelHabOfHabitacionListHabitacion.getHabitacionList().remove(habitacionListHabitacion);
-                    oldIdHotelHabOfHabitacionListHabitacion = em.merge(oldIdHotelHabOfHabitacionListHabitacion);
-                }
-            }
             for (Oferta ofertaListOferta : hotel.getOfertaList()) {
                 Hotel oldIdHotelOfOfertaListOferta = ofertaListOferta.getIdHotel();
                 ofertaListOferta.setIdHotel(hotel);
@@ -112,6 +93,15 @@ public class HotelJpaController implements Serializable {
                 if (oldIdHotelOfOfertaListOferta != null) {
                     oldIdHotelOfOfertaListOferta.getOfertaList().remove(ofertaListOferta);
                     oldIdHotelOfOfertaListOferta = em.merge(oldIdHotelOfOfertaListOferta);
+                }
+            }
+            for (Habitacion habitacionListHabitacion : hotel.getHabitacionList()) {
+                Hotel oldIdHotelHabOfHabitacionListHabitacion = habitacionListHabitacion.getIdHotelHab();
+                habitacionListHabitacion.setIdHotelHab(hotel);
+                habitacionListHabitacion = em.merge(habitacionListHabitacion);
+                if (oldIdHotelHabOfHabitacionListHabitacion != null) {
+                    oldIdHotelHabOfHabitacionListHabitacion.getHabitacionList().remove(habitacionListHabitacion);
+                    oldIdHotelHabOfHabitacionListHabitacion = em.merge(oldIdHotelHabOfHabitacionListHabitacion);
                 }
             }
             em.getTransaction().commit();
@@ -128,20 +118,14 @@ public class HotelJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Hotel persistentHotel = em.find(Hotel.class, hotel.getId());
-            Ubicacion idUbiOld = persistentHotel.getIdUbi();
-            Ubicacion idUbiNew = hotel.getIdUbi();
             Usuario idUserOld = persistentHotel.getIdUser();
             Usuario idUserNew = hotel.getIdUser();
             List<Favorito> favoritoListOld = persistentHotel.getFavoritoList();
             List<Favorito> favoritoListNew = hotel.getFavoritoList();
-            List<Habitacion> habitacionListOld = persistentHotel.getHabitacionList();
-            List<Habitacion> habitacionListNew = hotel.getHabitacionList();
             List<Oferta> ofertaListOld = persistentHotel.getOfertaList();
             List<Oferta> ofertaListNew = hotel.getOfertaList();
-            if (idUbiNew != null) {
-                idUbiNew = em.getReference(idUbiNew.getClass(), idUbiNew.getId());
-                hotel.setIdUbi(idUbiNew);
-            }
+            List<Habitacion> habitacionListOld = persistentHotel.getHabitacionList();
+            List<Habitacion> habitacionListNew = hotel.getHabitacionList();
             if (idUserNew != null) {
                 idUserNew = em.getReference(idUserNew.getClass(), idUserNew.getId());
                 hotel.setIdUser(idUserNew);
@@ -153,13 +137,6 @@ public class HotelJpaController implements Serializable {
             }
             favoritoListNew = attachedFavoritoListNew;
             hotel.setFavoritoList(favoritoListNew);
-            List<Habitacion> attachedHabitacionListNew = new ArrayList<Habitacion>();
-            for (Habitacion habitacionListNewHabitacionToAttach : habitacionListNew) {
-                habitacionListNewHabitacionToAttach = em.getReference(habitacionListNewHabitacionToAttach.getClass(), habitacionListNewHabitacionToAttach.getId());
-                attachedHabitacionListNew.add(habitacionListNewHabitacionToAttach);
-            }
-            habitacionListNew = attachedHabitacionListNew;
-            hotel.setHabitacionList(habitacionListNew);
             List<Oferta> attachedOfertaListNew = new ArrayList<Oferta>();
             for (Oferta ofertaListNewOfertaToAttach : ofertaListNew) {
                 ofertaListNewOfertaToAttach = em.getReference(ofertaListNewOfertaToAttach.getClass(), ofertaListNewOfertaToAttach.getId());
@@ -167,15 +144,14 @@ public class HotelJpaController implements Serializable {
             }
             ofertaListNew = attachedOfertaListNew;
             hotel.setOfertaList(ofertaListNew);
+            List<Habitacion> attachedHabitacionListNew = new ArrayList<Habitacion>();
+            for (Habitacion habitacionListNewHabitacionToAttach : habitacionListNew) {
+                habitacionListNewHabitacionToAttach = em.getReference(habitacionListNewHabitacionToAttach.getClass(), habitacionListNewHabitacionToAttach.getId());
+                attachedHabitacionListNew.add(habitacionListNewHabitacionToAttach);
+            }
+            habitacionListNew = attachedHabitacionListNew;
+            hotel.setHabitacionList(habitacionListNew);
             hotel = em.merge(hotel);
-            if (idUbiOld != null && !idUbiOld.equals(idUbiNew)) {
-                idUbiOld.getHotelList().remove(hotel);
-                idUbiOld = em.merge(idUbiOld);
-            }
-            if (idUbiNew != null && !idUbiNew.equals(idUbiOld)) {
-                idUbiNew.getHotelList().add(hotel);
-                idUbiNew = em.merge(idUbiNew);
-            }
             if (idUserOld != null && !idUserOld.equals(idUserNew)) {
                 idUserOld.getHotelList().remove(hotel);
                 idUserOld = em.merge(idUserOld);
@@ -201,23 +177,6 @@ public class HotelJpaController implements Serializable {
                     }
                 }
             }
-            for (Habitacion habitacionListOldHabitacion : habitacionListOld) {
-                if (!habitacionListNew.contains(habitacionListOldHabitacion)) {
-                    habitacionListOldHabitacion.setIdHotelHab(null);
-                    habitacionListOldHabitacion = em.merge(habitacionListOldHabitacion);
-                }
-            }
-            for (Habitacion habitacionListNewHabitacion : habitacionListNew) {
-                if (!habitacionListOld.contains(habitacionListNewHabitacion)) {
-                    Hotel oldIdHotelHabOfHabitacionListNewHabitacion = habitacionListNewHabitacion.getIdHotelHab();
-                    habitacionListNewHabitacion.setIdHotelHab(hotel);
-                    habitacionListNewHabitacion = em.merge(habitacionListNewHabitacion);
-                    if (oldIdHotelHabOfHabitacionListNewHabitacion != null && !oldIdHotelHabOfHabitacionListNewHabitacion.equals(hotel)) {
-                        oldIdHotelHabOfHabitacionListNewHabitacion.getHabitacionList().remove(habitacionListNewHabitacion);
-                        oldIdHotelHabOfHabitacionListNewHabitacion = em.merge(oldIdHotelHabOfHabitacionListNewHabitacion);
-                    }
-                }
-            }
             for (Oferta ofertaListOldOferta : ofertaListOld) {
                 if (!ofertaListNew.contains(ofertaListOldOferta)) {
                     ofertaListOldOferta.setIdHotel(null);
@@ -232,6 +191,23 @@ public class HotelJpaController implements Serializable {
                     if (oldIdHotelOfOfertaListNewOferta != null && !oldIdHotelOfOfertaListNewOferta.equals(hotel)) {
                         oldIdHotelOfOfertaListNewOferta.getOfertaList().remove(ofertaListNewOferta);
                         oldIdHotelOfOfertaListNewOferta = em.merge(oldIdHotelOfOfertaListNewOferta);
+                    }
+                }
+            }
+            for (Habitacion habitacionListOldHabitacion : habitacionListOld) {
+                if (!habitacionListNew.contains(habitacionListOldHabitacion)) {
+                    habitacionListOldHabitacion.setIdHotelHab(null);
+                    habitacionListOldHabitacion = em.merge(habitacionListOldHabitacion);
+                }
+            }
+            for (Habitacion habitacionListNewHabitacion : habitacionListNew) {
+                if (!habitacionListOld.contains(habitacionListNewHabitacion)) {
+                    Hotel oldIdHotelHabOfHabitacionListNewHabitacion = habitacionListNewHabitacion.getIdHotelHab();
+                    habitacionListNewHabitacion.setIdHotelHab(hotel);
+                    habitacionListNewHabitacion = em.merge(habitacionListNewHabitacion);
+                    if (oldIdHotelHabOfHabitacionListNewHabitacion != null && !oldIdHotelHabOfHabitacionListNewHabitacion.equals(hotel)) {
+                        oldIdHotelHabOfHabitacionListNewHabitacion.getHabitacionList().remove(habitacionListNewHabitacion);
+                        oldIdHotelHabOfHabitacionListNewHabitacion = em.merge(oldIdHotelHabOfHabitacionListNewHabitacion);
                     }
                 }
             }
@@ -264,11 +240,6 @@ public class HotelJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The hotel with id " + id + " no longer exists.", enfe);
             }
-            Ubicacion idUbi = hotel.getIdUbi();
-            if (idUbi != null) {
-                idUbi.getHotelList().remove(hotel);
-                idUbi = em.merge(idUbi);
-            }
             Usuario idUser = hotel.getIdUser();
             if (idUser != null) {
                 idUser.getHotelList().remove(hotel);
@@ -279,15 +250,15 @@ public class HotelJpaController implements Serializable {
                 favoritoListFavorito.setIdHotel(null);
                 favoritoListFavorito = em.merge(favoritoListFavorito);
             }
-            List<Habitacion> habitacionList = hotel.getHabitacionList();
-            for (Habitacion habitacionListHabitacion : habitacionList) {
-                habitacionListHabitacion.setIdHotelHab(null);
-                habitacionListHabitacion = em.merge(habitacionListHabitacion);
-            }
             List<Oferta> ofertaList = hotel.getOfertaList();
             for (Oferta ofertaListOferta : ofertaList) {
                 ofertaListOferta.setIdHotel(null);
                 ofertaListOferta = em.merge(ofertaListOferta);
+            }
+            List<Habitacion> habitacionList = hotel.getHabitacionList();
+            for (Habitacion habitacionListHabitacion : habitacionList) {
+                habitacionListHabitacion.setIdHotelHab(null);
+                habitacionListHabitacion = em.merge(habitacionListHabitacion);
             }
             em.remove(hotel);
             em.getTransaction().commit();

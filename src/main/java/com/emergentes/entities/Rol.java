@@ -5,7 +5,6 @@
 package com.emergentes.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -44,9 +43,6 @@ public class Rol implements Serializable {
     private List<Usuario> usuarioList;
 
     public Rol() {
-        this.id = 0;
-        this.rol = "";
-        this.usuarioList = new ArrayList<Usuario>();
     }
 
     public Rol(Integer id) {

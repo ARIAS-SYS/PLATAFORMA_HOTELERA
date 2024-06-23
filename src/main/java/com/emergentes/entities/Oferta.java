@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -29,7 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "oferta")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Oferta.findAll", query = "SELECT o FROM Oferta o"),
     @NamedQuery(name = "Oferta.findById", query = "SELECT o FROM Oferta o WHERE o.id = :id"),
@@ -76,16 +74,6 @@ public class Oferta implements Serializable {
     private TipoHabitacion idTipoHabitacion;
 
     public Oferta() {
-        this.id = 0;
-        this.titulo = "";
-        this.fechaInicio = new Date();
-        this.fechaFin = new Date();
-        this.descripcion = "";
-        this.estado = "";
-        this.foto = "";
-        this.descuento = 0;
-        this.idHotel = new Hotel();
-        this.idTipoHabitacion = new TipoHabitacion();
     }
 
     public Oferta(Integer id) {

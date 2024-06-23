@@ -42,9 +42,6 @@ public class ComodidadHabitacion implements Serializable {
     private Comodidad idComodidad;
 
     public ComodidadHabitacion() {
-        this.id=0;
-        this.idHabitacion = new Habitacion();
-        this.idComodidad = new Comodidad();
     }
 
     public ComodidadHabitacion(Integer id) {

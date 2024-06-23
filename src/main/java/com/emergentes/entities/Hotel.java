@@ -5,7 +5,6 @@
 package com.emergentes.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -20,8 +19,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,11 +37,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Hotel.findByInstagram", query = "SELECT h FROM Hotel h WHERE h.instagram = :instagram"),
     @NamedQuery(name = "Hotel.findByFoto", query = "SELECT h FROM Hotel h WHERE h.foto = :foto"),
     @NamedQuery(name = "Hotel.findByLinkUbicacion", query = "SELECT h FROM Hotel h WHERE h.linkUbicacion = :linkUbicacion"),
-    @NamedQuery(name = "Hotel.findByCalificacion", query = "SELECT h FROM Hotel h WHERE h.calificacion = :calificacion")})
+    @NamedQuery(name = "Hotel.findByCalificacion", query = "SELECT h FROM Hotel h WHERE h.calificacion = :calificacion"),
+    @NamedQuery(name = "Hotel.findByPais", query = "SELECT h FROM Hotel h WHERE h.pais = :pais"),
+    @NamedQuery(name = "Hotel.findByDepartamento", query = "SELECT h FROM Hotel h WHERE h.departamento = :departamento"),
+    @NamedQuery(name = "Hotel.findByCiudad", query = "SELECT h FROM Hotel h WHERE h.ciudad = :ciudad"),
+    @NamedQuery(name = "Hotel.findByDescripcionUbi", query = "SELECT h FROM Hotel h WHERE h.descripcionUbi = :descripcionUbi"),
+    @NamedQuery(name = "Hotel.findByIdUbi", query = "SELECT h FROM Hotel h WHERE h.idUbi = :idUbi")})
 public class Hotel implements Serializable {
-
-    @OneToMany(mappedBy = "idHotel")
-    private List<Oferta> ofertaList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,11 +74,32 @@ public class Hotel implements Serializable {
     private String linkUbicacion;
     @Column(name = "calificacion")
     private Long calificacion;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Column(name = "pais")
+    private String pais;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Column(name = "departamento")
+    private String departamento;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Column(name = "ciudad")
+    private String ciudad;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "descripcion_ubi")
+    private String descripcionUbi;
+    @Column(name = "id_ubi")
+    private Integer idUbi;
     @OneToMany(mappedBy = "idHotel")
     private List<Favorito> favoritoList;
-    @JoinColumn(name = "id_ubi", referencedColumnName = "id")
-    @ManyToOne
-    private Ubicacion idUbi;
+    @OneToMany(mappedBy = "idHotel")
+    private List<Oferta> ofertaList;
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     @ManyToOne
     private Usuario idUser;
@@ -85,25 +107,18 @@ public class Hotel implements Serializable {
     private List<Habitacion> habitacionList;
 
     public Hotel() {
-        this.id = 0;
-        this.nombre = "";
-        this.descripcion = "";
-        this.celular = 0;
-        this.facebook = "";
-        this.instagram = "";
-        this.foto = "";
-        this.linkUbicacion = "";
-        this.calificacion = 0L;
-        this.favoritoList = new ArrayList<Favorito>();
-        this.idUbi = new Ubicacion();
-        this.idUser = new Usuario();
-        this.habitacionList = new ArrayList<Habitacion>();
-
-
     }
 
     public Hotel(Integer id) {
         this.id = id;
+    }
+
+    public Hotel(Integer id, String pais, String departamento, String ciudad, String descripcionUbi) {
+        this.id = id;
+        this.pais = pais;
+        this.departamento = departamento;
+        this.ciudad = ciudad;
+        this.descripcionUbi = descripcionUbi;
     }
 
     public Integer getId() {
@@ -178,6 +193,46 @@ public class Hotel implements Serializable {
         this.calificacion = calificacion;
     }
 
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getDescripcionUbi() {
+        return descripcionUbi;
+    }
+
+    public void setDescripcionUbi(String descripcionUbi) {
+        this.descripcionUbi = descripcionUbi;
+    }
+
+    public Integer getIdUbi() {
+        return idUbi;
+    }
+
+    public void setIdUbi(Integer idUbi) {
+        this.idUbi = idUbi;
+    }
+
     public List<Favorito> getFavoritoList() {
         return favoritoList;
     }
@@ -186,12 +241,12 @@ public class Hotel implements Serializable {
         this.favoritoList = favoritoList;
     }
 
-    public Ubicacion getIdUbi() {
-        return idUbi;
+    public List<Oferta> getOfertaList() {
+        return ofertaList;
     }
 
-    public void setIdUbi(Ubicacion idUbi) {
-        this.idUbi = idUbi;
+    public void setOfertaList(List<Oferta> ofertaList) {
+        this.ofertaList = ofertaList;
     }
 
     public Usuario getIdUser() {
@@ -233,15 +288,6 @@ public class Hotel implements Serializable {
     @Override
     public String toString() {
         return "com.emergentes.entities.Hotel[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public List<Oferta> getOfertaList() {
-        return ofertaList;
-    }
-
-    public void setOfertaList(List<Oferta> ofertaList) {
-        this.ofertaList = ofertaList;
     }
     
 }

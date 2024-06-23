@@ -5,7 +5,6 @@
 package com.emergentes.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -48,12 +47,8 @@ public class Comodidad implements Serializable {
     private List<ComodidadHabitacion> comodidadHabitacionList;
 
     public Comodidad() {
-        this.id=0;
-        this.comodidad="";
-        this.icono="";
-        this.comodidadHabitacionList = new ArrayList<ComodidadHabitacion>();
     }
-    
+
     public Comodidad(Integer id) {
         this.id = id;
     }

@@ -42,9 +42,6 @@ public class Favorito implements Serializable {
     private Hotel idHotel;
 
     public Favorito() {
-        this.id = 0;
-        this.idUsuario = new Usuario();
-        this.idHotel = new Hotel();
     }
 
     public Favorito(Integer id) {
