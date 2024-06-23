@@ -67,7 +67,7 @@
                     <input type="email" name="email" placeholder="Email" class="block w-full px-3 py-2 bg-transparent border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
                 </div>
                 <div class="mb-4">
-                    <input type="password" placeholder="Password" class="block w-full px-3 py-2 bg-transparent border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
+                    <input type="password" name="password" placeholder="Password" class="block w-full px-3 py-2 bg-transparent border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
                 </div>
                 <div class="mb-4">
                     <select name="rol" class="block w-full px-3 py-2 bg-[#0F1522] border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">

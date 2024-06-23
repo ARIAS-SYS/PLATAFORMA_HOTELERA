@@ -62,7 +62,7 @@ public class LoginController extends HttpServlet {
                 }
             }
             if(estado==1){
-                System.out.println("contrase correcta condicion de" );
+                System.out.println("contrase correcta" );
             }else{
                 System.out.println("contrase incorrecta");
             }
@@ -80,7 +80,21 @@ public class LoginController extends HttpServlet {
             user.setEmail(email);
             user.setPassword(password);
             user.setIdRol(rol);
+            user.setActivo(1);
+            
+            daoUsuario.insertar(user);
+            
+            List<Usuario> usuarios = daoUsuario.listarTodos();
+            
+            for(Usuario usuario: usuarios){
+                if(usuario.getEmail().equals(email) && usuario.getPassword().equals(password)){
+                    HttpSession ses = request.getSession();
+                    ses.setAttribute("usuario", usuario);
+                    ses.setAttribute("login", "OK");
 
+                }
+            }
+            
             response.sendRedirect(request.getContextPath() + "/MainController");
         }
         
