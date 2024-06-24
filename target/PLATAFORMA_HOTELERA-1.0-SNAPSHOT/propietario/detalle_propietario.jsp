@@ -26,7 +26,7 @@
             <!-- main -->
             <main class="flex-1 max-h-full p-5 overflow-hidden overflow-y-scroll">
 
-                <h2 class="text-white text-5xl text-center mt-10 font-bold">Hotel Presidencial</h2>
+                <h2 class="text-white text-5xl text-center mt-10 font-bold">${usuario.hotelList}</h2>
                 <div class="mx-40 mt-10">
                     <div class="bg-[#8f9eb31c] p-5">
                         <h3 class="text-gray-300 font-bold text-xl mb-3">Hotel</h3>

@@ -77,8 +77,21 @@ public class MainController extends HttpServlet {
                 request.getRequestDispatcher("cliente/perfil_cliente.jsp").forward(request, response);
                 break;
             case "propietario":
-                request.setAttribute("usuario", usuario);
-                request.getRequestDispatcher("propietario/perfil_propietario.jsp").forward(request, response);
+                
+                List<Hotel> hotelesUser = usuario.getHotelList();
+                Hotel hotelPro = null;
+
+                
+                for(Hotel hotel1: hotelesUser){
+                    System.out.println("item "+hotel1.getNombre());
+                    hotelPro=hotel1;
+                }
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("hotel", hotelPro);
+                    request.getRequestDispatcher("propietario/perfil_propietario.jsp").forward(request, response);
+                }
                 break;
             case "confirmar":
                 int idHabitacion=Integer.parseInt(request.getParameter("habitacion"));
