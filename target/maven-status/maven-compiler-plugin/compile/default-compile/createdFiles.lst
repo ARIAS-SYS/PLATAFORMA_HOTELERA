@@ -4,17 +4,19 @@ com\emergentes\entities\TipoHabitacion.class
 com\emergentes\jpa\ComodidadJpaController.class
 com\emergentes\bean\BeanComodidadHabitacion.class
 com\emergentes\jpa\TipoHabitacionJpaController.class
+com\emergentes\controller\ClienteController.class
 com\emergentes\bean\BeanTipoHabitacion.class
-com\emergentes\jpa\UbicacionJpaController.class
+com\emergentes\controller\MainController.class
 com\emergentes\jpa\exceptions\PreexistingEntityException.class
 com\emergentes\entities\Comodidad_.class
 com\emergentes\jpa\UsuarioJpaController.class
 com\emergentes\entities\Comodidad.class
 com\emergentes\entities\ComodidadHabitacion_.class
-com\emergentes\bean\BeanUbicacion.class
 com\emergentes\entities\Oferta_.class
 com\emergentes\entities\Rol_.class
 com\emergentes\jpa\FavoritoJpaController.class
+com\emergentes\controller\PropietarioController.class
+com\emergentes\controller\LoginController.class
 com\emergentes\entities\Reserva.class
 com\emergentes\entities\Habitacion_.class
 com\emergentes\entities\Usuario.class
@@ -23,7 +25,6 @@ com\emergentes\entities\TipoHabitacion_.class
 com\emergentes\jpa\exceptions\IllegalOrphanException.class
 com\emergentes\entities\ComodidadHabitacion.class
 com\emergentes\jpa\HotelJpaController.class
-com\emergentes\entities\Ubicacion_.class
 com\emergentes\entities\Hotel.class
 com\emergentes\jpa\OfertaJpaController.class
 com\emergentes\entities\Oferta.class
@@ -44,4 +45,3 @@ com\emergentes\bean\BeanRol.class
 com\emergentes\entities\Favorito.class
 com\emergentes\bean\BeanHotel.class
 com\emergentes\jpa\HabitacionJpaController.class
-com\emergentes\entities\Ubicacion.class
