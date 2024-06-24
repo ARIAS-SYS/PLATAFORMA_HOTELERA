@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -53,8 +54,22 @@ public class PropietarioController extends HttpServlet {
                 request.getRequestDispatcher("propietario/ofertas_propietario.jsp").forward(request, response);
                 break;
             case "detalle":
-                request.setAttribute("usuario", usuario);
-                request.getRequestDispatcher("propietario/detalle_propietario.jsp").forward(request, response);
+                List<Hotel> hotelesUser = usuario.getHotelList();
+                Hotel hotelPro = null;
+
+                
+                for(Hotel hotel1: hotelesUser){
+                    System.out.println("item "+hotel1.getNombre());
+                    hotelPro=hotel1;
+                }
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+
+                    request.getRequestDispatcher("propietario/detalle_propietario.jsp").forward(request, response);
+                }
                 break;
         }
 
