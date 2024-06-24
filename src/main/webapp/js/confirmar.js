@@ -58,6 +58,34 @@ $(document).ready(function(){
         console.log("Fecha de inicio: " + fechaInicio); // "23-06-2024"
         console.log("Fecha de fin: " + fechaFin);       // "24-06-2024"
         
+        function calcularDiferenciaEnDias(fecha1, fecha2) {
+            // Separar día, mes y año de fecha1
+            let partesFecha1 = fecha1.split("-");
+            let dia1 = parseInt(partesFecha1[0], 10);
+            let mes1 = parseInt(partesFecha1[1], 10) - 1; // Meses en JavaScript van de 0 a 11
+            let anio1 = parseInt(partesFecha1[2], 10);
+
+            // Separar día, mes y año de fecha2
+            let partesFecha2 = fecha2.split("-");
+            let dia2 = parseInt(partesFecha2[0], 10);
+            let mes2 = parseInt(partesFecha2[1], 10) - 1; // Meses en JavaScript van de 0 a 11
+            let anio2 = parseInt(partesFecha2[2], 10);
+
+            // Crear objetos Date para ambas fechas
+            let fechaObj1 = new Date(anio1, mes1, dia1);
+            let fechaObj2 = new Date(anio2, mes2, dia2);
+
+            // Calcular la diferencia en milisegundos
+            let diferenciaMs = fechaObj2 - fechaObj1;
+
+            // Convertir la diferencia de milisegundos a días
+            let diferenciaDias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+
+            return diferenciaDias;
+        }
+        
+        let cantidadDias = calcularDiferenciaEnDias(fechaInicio, fechaFin);
+        
         let today = new Date();
 
         // Obtener el día, mes y año
@@ -86,6 +114,7 @@ $(document).ready(function(){
                             precio: precio,
                             fechaInicio: fechaInicio,
                             fechaActual: fechaActual,
+                            cantidadDias: cantidadDias,
                             fechaFin: fechaFin
                         },
                         success: function(response) {

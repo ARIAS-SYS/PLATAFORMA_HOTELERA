@@ -33,6 +33,9 @@
                 <main class="flex-1 max-h-full p-5 overflow-hidden overflow-y-scroll">
                     <!-- respuesta -->
                     <section class="p-5 lg:px-20 pt-5">
+                        
+                        <h2 class="text-gray-400 py-3 pb-10 text-center text-xl lg:text-2xl font-semibold">Historial de Reservas</h2>
+
                         <div class="flex flex-wrap items-center justify-around gap-5">
                 
                             <!-- card normal -->

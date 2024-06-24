@@ -185,11 +185,12 @@ public class MainController extends HttpServlet {
          
                 int habitacionId = Integer.parseInt(request.getParameter("habitacionId"));
                 
-                String precio = request.getParameter("precio");
+                float precio = Float.parseFloat(request.getParameter("precio")) ;
                 
                 String fechaFin = request.getParameter("fechaFin");
                 String fechaInicio = request.getParameter("fechaInicio");
                 String fechaActual = request.getParameter("fechaActual");
+                int cantidadDias = Integer.parseInt(request.getParameter("cantidadDias"));
                 
 
                 
@@ -203,10 +204,12 @@ public class MainController extends HttpServlet {
                 System.out.println("fechaInicio "+ fechaInicio);
                 System.out.println("fechaFin "+ fechaFin);
                 System.out.println("fechaActual "+ fechaActual);
+                System.out.println("cantidadDias "+ cantidadDias);
                 
-                                
+                float precioTotal = precio * cantidadDias;
+                
                 Reserva reserva = new Reserva();
-                reserva.setTotalPrecio(Long.parseLong(precio));
+                reserva.setTotalPrecio((long) precioTotal);
                 reserva.setIdHabit(habitacion);
                 reserva.setIdUsuario(usuario1);
                 reserva.setEstado("Reservado");
