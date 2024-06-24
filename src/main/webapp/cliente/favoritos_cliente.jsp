@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -5,10 +6,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ReservaYa</title>
 
     <!-- tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    
+    <!-- funciones locales -->
+    <script src="js/quitarFavorito.js" type="text/javascript"></script>
+
 
     <!-- estilos locales -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
@@ -37,115 +46,48 @@
                         <h2 class="text-2xl text-center font-semibold text-gray-400 mb-10">Favoritos</h2>
                         
                         <div class="flex flex-wrap items-center justify-around gap-5">
-                
-                            <!-- card 1 -->
-                            <a href="hotel.html" class="w-[18rem] bg-[#8f9eb31c] hover:bg-[#2A3345] rounded-md mb-5">
-                                <div class="cursor-pointer">            
-                                <img class="w-full h-[10rem] rounded-t-md object-cover" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">            
-                                <div class="p-4 textPart flex w-full justify-between ">
-                                    <div class="space-y-1">
-                                    <h3 class="font-semibold text-lg text-white">
-                                        Luminoso Oasis Hotel
-                                    </h3>
-                                    <p class="text-gray-500 text-sm">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, temporibus.
-                                    </p>
-                                    </div>
-                                    
-                                    
-                                    <div>
-                                    <button onclick="return(alert('hola'))">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
-                                        class="size-[1.5rem] text-[#D91C58] cursor-pointer">
-                                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-                                        </svg>
-                                    </button>                
-                                    </div>
-                                </div>
-                                </div>
-                            </a>
-                    
-                            <!-- card 2 -->
-                            <a href="hotel.html" class="w-[18rem] bg-[#8f9eb31c] hover:bg-[#2A3345] rounded-md mb-5">
-                                <div class="cursor-pointer">            
-                                <img class="w-full h-[10rem] rounded-t-md object-cover" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">            
-                                <div class="p-4 textPart flex w-full justify-between ">
-                                    <div class="space-y-1">
-                                    <h3 class="font-semibold text-lg text-white">
-                                        Luminoso Oasis Hotel
-                                    </h3>
-                                    <p class="text-gray-500 text-sm">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, temporibus.
-                                    </p>
-                                    </div>
-                                    
-                                    
-                                    <div>
-                                    <button onclick="return(alert('hola'))">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
-                                        class="size-[1.5rem] text-[#D91C58] cursor-pointer">
-                                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-                                        </svg>
-                                    </button>                
-                                    </div>
-                                </div>
-                                </div>
-                            </a>
-                    
-                            <!-- card 3 -->
-                            <a href="hotel.html" class="w-[18rem] bg-[#8f9eb31c] hover:bg-[#2A3345] rounded-md mb-5">
-                                <div class="cursor-pointer">            
-                                <img class="w-full h-[10rem] rounded-t-md object-cover" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">            
-                                <div class="p-4 textPart flex w-full justify-between ">
-                                    <div class="space-y-1">
-                                    <h3 class="font-semibold text-lg text-white">
-                                        Luminoso Oasis Hotel
-                                    </h3>
-                                    <p class="text-gray-500 text-sm">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, temporibus.
-                                    </p>
-                                    </div>
-                                    
-                                    
-                                    <div>
-                                    <button onclick="return(alert('hola'))">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
-                                        class="size-[1.5rem] text-[#D91C58] cursor-pointer">
-                                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-                                        </svg>
-                                    </button>                
-                                    </div>
-                                </div>
-                                </div>
-                            </a>
-                    
-                            <!-- card 4 -->
-                            <a href="hotel.html" class="w-[18rem] bg-[#8f9eb31c] hover:bg-[#2A3345] rounded-md mb-5">
-                                <div class="cursor-pointer">            
-                                <img class="w-full h-[10rem] rounded-t-md object-cover" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">            
-                                <div class="p-4 textPart flex w-full justify-between ">
-                                    <div class="space-y-1">
-                                    <h3 class="font-semibold text-lg text-white">
-                                        Luminoso Oasis Hotel
-                                    </h3>
-                                    <p class="text-gray-500 text-sm">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, temporibus.
-                                    </p>
-                                    </div>
-                                    
-                                    
-                                    <div>
-                                    <button onclick="return(alert('hola'))">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
-                                        class="size-[1.5rem] text-[#D91C58] cursor-pointer">
-                                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-                                        </svg>
-                                    </button>                
-                                    </div>
-                                </div>
-                                </div>
-                            </a>
-                
+                            
+                            <c:forEach var="item" items="${hoteles}">
+                                
+                                <c:set var="esFavorito" value="false" />
+
+                                <c:forEach var="favorito" items="${item.favoritoList}">
+                                    <c:if test="${favorito.idUsuario.id == usuario.id}">
+                                        <c:set var="esFavorito" value="true" />
+                                    </c:if>
+                                </c:forEach>
+                                
+                                <c:if test="${esFavorito == true}">
+                                
+                                    <!-- card 1 -->
+                                    <a href="MainController?action=hotel&id=${item.id}" class="w-[18rem] bg-[#8F9EB31C] hover:bg-[#2A3345] rounded-md mb-5">
+                                        <img class="w-full h-[10rem] rounded-t-md object-cover object-center" src="images/${item.foto}" alt="">
+                                        <div class="p-4 flex w-full justify-between">
+                                            <div class="space-y-1">
+                                                <h3 class="text-white font-semibold text-lg">
+                                                    ${item.nombre}
+                                                </h3>
+                                                <p class="text-gray-500 text-sm">
+                                                    ${item.descripcion}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <button class="favorito" data-hotel="${item.id}">
+                                                    <div class="esfavorito">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
+                                                            class="size-[1.5rem] text-[#D91C58] cursor-pointer">
+                                                            <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                                                        </svg>
+                                                    </div>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </a>
+                                                    
+                                </c:if>
+                                     
+                            </c:forEach>
                         </div>
                         
                         

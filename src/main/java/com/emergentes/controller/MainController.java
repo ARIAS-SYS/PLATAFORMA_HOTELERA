@@ -6,6 +6,7 @@ import com.emergentes.bean.BeanHabitacion;
 import com.emergentes.bean.BeanHotel;
 import com.emergentes.bean.BeanOferta;
 import com.emergentes.bean.BeanReserva;
+import com.emergentes.bean.BeanUsuario;
 import com.emergentes.entities.Favorito;
 import com.emergentes.entities.Habitacion;
 import com.emergentes.entities.Hotel;
@@ -39,7 +40,7 @@ public class MainController extends HttpServlet {
         
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-
+        
 
         int id;
         
@@ -105,6 +106,7 @@ public class MainController extends HttpServlet {
                     
                     boolean isCliente = true;
                     Usuario usuario = (Usuario) session.getAttribute("usuario");
+           
                     
                     if(usuario.getIdRol().getId()==2){
                         isCliente = false;
@@ -138,6 +140,9 @@ public class MainController extends HttpServlet {
                 Favorito elemento = new Favorito();
 
                 Usuario usuario = (Usuario) session.getAttribute("usuario");
+                
+
+        
                 int itemId = Integer.parseInt(request.getParameter("hotelId"));
                 boolean isFavorite = Boolean.parseBoolean(request.getParameter("isFavorite"));
 
@@ -182,6 +187,7 @@ public class MainController extends HttpServlet {
                 
                 System.out.println("reservar");               
                 Usuario usuario1 = (Usuario) session.getAttribute("usuario");
+                
          
                 int habitacionId = Integer.parseInt(request.getParameter("habitacionId"));
                 
