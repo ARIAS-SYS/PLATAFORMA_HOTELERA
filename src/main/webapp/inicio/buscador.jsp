@@ -19,7 +19,7 @@
 
 
     <!-- estilos locales -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 
 
 </head>

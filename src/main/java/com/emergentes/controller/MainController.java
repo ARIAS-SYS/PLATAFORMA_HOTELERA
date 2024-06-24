@@ -2,14 +2,22 @@
 package com.emergentes.controller;
 
 import com.emergentes.bean.BeanFavorito;
+import com.emergentes.bean.BeanHabitacion;
 import com.emergentes.bean.BeanHotel;
 import com.emergentes.bean.BeanOferta;
+import com.emergentes.bean.BeanReserva;
 import com.emergentes.entities.Favorito;
+import com.emergentes.entities.Habitacion;
 import com.emergentes.entities.Hotel;
 import com.emergentes.entities.Oferta;
+import com.emergentes.entities.Reserva;
 import com.emergentes.entities.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +25,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(name = "MainController", urlPatterns = {"/MainController"})
 public class MainController extends HttpServlet {
@@ -30,11 +42,15 @@ public class MainController extends HttpServlet {
 
 
         int id;
+        
         BeanHotel daoHotel = new BeanHotel();
         Hotel hotel = new Hotel();
         
         BeanOferta daoOferta = new BeanOferta();
         Oferta oferta = new Oferta();
+        
+        BeanHabitacion daoHabitacion = new BeanHabitacion();
+        Habitacion habitacion = new Habitacion();
         
         String action = (request.getParameter("action") != null) ? request.getParameter("action") : "index";
         
@@ -62,6 +78,15 @@ public class MainController extends HttpServlet {
             case "propietario":
                 request.setAttribute("usuario", usuario);
                 request.getRequestDispatcher("propietario/perfil_propietario.jsp").forward(request, response);
+                break;
+            case "confirmar":
+                int idHabitacion=Integer.parseInt(request.getParameter("habitacion"));
+                habitacion = daoHabitacion.buscar(idHabitacion);
+                request.setAttribute("habitacion", habitacion);
+                request.getRequestDispatcher("inicio/confirmacion.jsp").forward(request, response);
+                break;
+            case "success":
+                request.getRequestDispatcher("inicio/success.jsp").forward(request, response);
                 break;
         }
 
@@ -153,8 +178,75 @@ public class MainController extends HttpServlet {
                  
                 
                 break;
+            case "reservar":
+                
+                System.out.println("reservar");               
+                Usuario usuario1 = (Usuario) session.getAttribute("usuario");
+         
+                int habitacionId = Integer.parseInt(request.getParameter("habitacionId"));
+                
+                String precio = request.getParameter("precio");
+                
+                String fechaFin = request.getParameter("fechaFin");
+                String fechaInicio = request.getParameter("fechaInicio");
+                String fechaActual = request.getParameter("fechaActual");
+                
+
+                
+                BeanReserva daoReserva = new BeanReserva();
+                BeanHabitacion daoHabitacion = new BeanHabitacion();
+                Habitacion habitacion = daoHabitacion.buscar(habitacionId);
+                
+                System.out.println("usuario "+ usuario1.getNombre());
+                System.out.println("habitacionId "+ habitacion.getCodigo());
+                System.out.println("precio "+ precio);
+                System.out.println("fechaInicio "+ fechaInicio);
+                System.out.println("fechaFin "+ fechaFin);
+                System.out.println("fechaActual "+ fechaActual);
+                
+                                
+                Reserva reserva = new Reserva();
+                reserva.setTotalPrecio(Long.parseLong(precio));
+                reserva.setIdHabit(habitacion);
+                reserva.setIdUsuario(usuario1);
+                reserva.setEstado("Reservado");
+                reserva.setFechaReserva(convertirFecha(fechaActual));
+                reserva.setFechaInicio(convertirFecha(fechaInicio));
+                reserva.setFechaFin(convertirFecha(fechaFin));
+
+                System.out.println("antes");
+                daoReserva.insertar(reserva);
+
+                System.out.println("despues");
+                
+                // Devolver respuesta JSON
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                PrintWriter out1 = response.getWriter();
+                out1.print("{\"success\": " + true + "}");
+                out1.flush();
+
+                
+                break;
         }
 
+    }
+    
+    public java.sql.Date convertirFecha(String fecha){
+        java.sql.Date fechaBD = null;
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+        
+        java.util.Date fechaTMP;
+        try {
+            fechaTMP = formato.parse(fecha);
+            fechaBD = new java.sql.Date(fechaTMP.getTime());
+        } catch (ParseException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+              
+        return fechaBD;
+        
     }
 
 }

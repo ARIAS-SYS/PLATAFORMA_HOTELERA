@@ -12,6 +12,7 @@
 
     <!-- estilos locales -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
+    
 </head>
 <body class="bg-[#0F1522]">
     <!-- component -->

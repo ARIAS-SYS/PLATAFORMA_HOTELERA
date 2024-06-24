@@ -16,7 +16,7 @@
 
 
     <!-- estilos locales -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 
 
 </head>
@@ -94,7 +94,7 @@
                                         <c:set var="enOferta" value="false" />
 
                                         <c:forEach var="oferta" items="${item.idTipoHab.ofertaList}">                            
-                                            <c:if test="${oferta.idHotel.id == hotel.id}">
+                                            <c:if test="${oferta.idHotel.id == hotel.id && oferta.estado == 'En Curso'}">
                                                 <c:set var="enOferta" value="true" />
                                                 <c:set var="descuento" value="${oferta.descuento}" />
                                             </c:if>
@@ -126,13 +126,13 @@
                                                 <img src="${pageContext.request.contextPath}/icons/${comodidad.idComodidad.icono}" class="w-[1.3rem] h-[1.3rem]" alt="">
                                                 <span class="text-[#8F9EB3]">${comodidad.idComodidad.comodidad}</span>
                                             </div>
-                                      </c:forEach>
+                                        </c:forEach>
                                     </div>
                                 </div>                    
                             </div>
                         </div>
                         <div class="lg:w-[20%] lg:flex lg:items-end lg:justify-end lg:pr-5">
-                            <a href="#" class="inline-block w-full lg:w-fit text-[#FF7D7D] hover:text-[#F49999] text-center py-3 lg:py-0 text-base font-bold tracking-widest">
+                            <a href="MainController?action=confirmar&habitacion=${item.id}" class="inline-block w-full lg:w-fit text-[#FF7D7D] hover:text-[#F49999] text-center py-3 lg:py-0 text-base font-bold tracking-widest">
                                 Reservar
                             </a>
                         </div>

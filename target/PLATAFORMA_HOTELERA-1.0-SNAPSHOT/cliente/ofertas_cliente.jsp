@@ -10,19 +10,10 @@
     <!-- tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-            extend: {
-                colors: {
-                clifford: "#da373d",
-                },
-            },
-            },
-        };
-    </script>
+    
     <!-- estilos locales -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
+    
 </head>
 <body class="bg-[#0F1522]">
     <!-- component -->
