@@ -5,6 +5,7 @@
 package com.emergentes.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -43,12 +46,23 @@ public class TipoHabitacion implements Serializable {
     @Size(max = 100)
     @Column(name = "foto")
     private String foto;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+    @ManyToOne
+    private Usuario idUsuario;
     @OneToMany(mappedBy = "idTipoHabitacion")
     private List<Oferta> ofertaList;
     @OneToMany(mappedBy = "idTipoHab")
     private List<Habitacion> habitacionList;
 
     public TipoHabitacion() {
+        
+        this.id = 0;
+        this.tipo = "";
+        this.foto = "";
+        this.idUsuario = new Usuario();
+        this.ofertaList = new ArrayList<Oferta>();
+        this.habitacionList = new ArrayList<Habitacion>();
+        
     }
 
     public TipoHabitacion(Integer id) {
@@ -77,6 +91,14 @@ public class TipoHabitacion implements Serializable {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public Usuario getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Usuario idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public List<Oferta> getOfertaList() {

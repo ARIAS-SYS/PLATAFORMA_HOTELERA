@@ -54,6 +54,8 @@ public class Usuario implements Serializable {
     @Column(name = "activo")
     private Integer activo;
     @OneToMany(mappedBy = "idUsuario")
+    private List<TipoHabitacion> tipoHabitacionList;
+    @OneToMany(mappedBy = "idUsuario")
     private List<Favorito> favoritoList;
     @OneToMany(mappedBy = "idUser")
     private List<Hotel> hotelList;
@@ -108,6 +110,14 @@ public class Usuario implements Serializable {
 
     public void setActivo(Integer activo) {
         this.activo = activo;
+    }
+
+    public List<TipoHabitacion> getTipoHabitacionList() {
+        return tipoHabitacionList;
+    }
+
+    public void setTipoHabitacionList(List<TipoHabitacion> tipoHabitacionList) {
+        this.tipoHabitacionList = tipoHabitacionList;
     }
 
     public List<Favorito> getFavoritoList() {

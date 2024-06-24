@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.emergentes.entities.Usuario;
 import com.emergentes.entities.Oferta;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,11 @@ public class TipoHabitacionJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Usuario idUsuario = tipoHabitacion.getIdUsuario();
+            if (idUsuario != null) {
+                idUsuario = em.getReference(idUsuario.getClass(), idUsuario.getId());
+                tipoHabitacion.setIdUsuario(idUsuario);
+            }
             List<Oferta> attachedOfertaList = new ArrayList<Oferta>();
             for (Oferta ofertaListOfertaToAttach : tipoHabitacion.getOfertaList()) {
                 ofertaListOfertaToAttach = em.getReference(ofertaListOfertaToAttach.getClass(), ofertaListOfertaToAttach.getId());
@@ -57,6 +63,10 @@ public class TipoHabitacionJpaController implements Serializable {
             }
             tipoHabitacion.setHabitacionList(attachedHabitacionList);
             em.persist(tipoHabitacion);
+            if (idUsuario != null) {
+                idUsuario.getTipoHabitacionList().add(tipoHabitacion);
+                idUsuario = em.merge(idUsuario);
+            }
             for (Oferta ofertaListOferta : tipoHabitacion.getOfertaList()) {
                 TipoHabitacion oldIdTipoHabitacionOfOfertaListOferta = ofertaListOferta.getIdTipoHabitacion();
                 ofertaListOferta.setIdTipoHabitacion(tipoHabitacion);
@@ -89,10 +99,16 @@ public class TipoHabitacionJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             TipoHabitacion persistentTipoHabitacion = em.find(TipoHabitacion.class, tipoHabitacion.getId());
+            Usuario idUsuarioOld = persistentTipoHabitacion.getIdUsuario();
+            Usuario idUsuarioNew = tipoHabitacion.getIdUsuario();
             List<Oferta> ofertaListOld = persistentTipoHabitacion.getOfertaList();
             List<Oferta> ofertaListNew = tipoHabitacion.getOfertaList();
             List<Habitacion> habitacionListOld = persistentTipoHabitacion.getHabitacionList();
             List<Habitacion> habitacionListNew = tipoHabitacion.getHabitacionList();
+            if (idUsuarioNew != null) {
+                idUsuarioNew = em.getReference(idUsuarioNew.getClass(), idUsuarioNew.getId());
+                tipoHabitacion.setIdUsuario(idUsuarioNew);
+            }
             List<Oferta> attachedOfertaListNew = new ArrayList<Oferta>();
             for (Oferta ofertaListNewOfertaToAttach : ofertaListNew) {
                 ofertaListNewOfertaToAttach = em.getReference(ofertaListNewOfertaToAttach.getClass(), ofertaListNewOfertaToAttach.getId());
@@ -108,6 +124,14 @@ public class TipoHabitacionJpaController implements Serializable {
             habitacionListNew = attachedHabitacionListNew;
             tipoHabitacion.setHabitacionList(habitacionListNew);
             tipoHabitacion = em.merge(tipoHabitacion);
+            if (idUsuarioOld != null && !idUsuarioOld.equals(idUsuarioNew)) {
+                idUsuarioOld.getTipoHabitacionList().remove(tipoHabitacion);
+                idUsuarioOld = em.merge(idUsuarioOld);
+            }
+            if (idUsuarioNew != null && !idUsuarioNew.equals(idUsuarioOld)) {
+                idUsuarioNew.getTipoHabitacionList().add(tipoHabitacion);
+                idUsuarioNew = em.merge(idUsuarioNew);
+            }
             for (Oferta ofertaListOldOferta : ofertaListOld) {
                 if (!ofertaListNew.contains(ofertaListOldOferta)) {
                     ofertaListOldOferta.setIdTipoHabitacion(null);
@@ -170,6 +194,11 @@ public class TipoHabitacionJpaController implements Serializable {
                 tipoHabitacion.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The tipoHabitacion with id " + id + " no longer exists.", enfe);
+            }
+            Usuario idUsuario = tipoHabitacion.getIdUsuario();
+            if (idUsuario != null) {
+                idUsuario.getTipoHabitacionList().remove(tipoHabitacion);
+                idUsuario = em.merge(idUsuario);
             }
             List<Oferta> ofertaList = tipoHabitacion.getOfertaList();
             for (Oferta ofertaListOferta : ofertaList) {

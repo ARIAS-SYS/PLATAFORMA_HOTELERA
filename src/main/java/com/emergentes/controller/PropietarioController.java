@@ -2,8 +2,10 @@
 package com.emergentes.controller;
 
 import com.emergentes.bean.BeanHotel;
+import com.emergentes.bean.BeanTipoHabitacion;
 import com.emergentes.bean.BeanUsuario;
 import com.emergentes.entities.Hotel;
+import com.emergentes.entities.TipoHabitacion;
 import com.emergentes.entities.Usuario;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,19 @@ public class PropietarioController extends HttpServlet {
         BeanUsuario daoUsuario = new BeanUsuario();      
         usuario=daoUsuario.buscar(usuario.getId());
         session.setAttribute("usuario", usuario);
+        
+        BeanTipoHabitacion daoTipoHabitacion = new BeanTipoHabitacion();
+        List<TipoHabitacion> tipoHabitaciones = daoTipoHabitacion.listarTodos();
+
+        
+        List<Hotel> hotelesUser = usuario.getHotelList();
+        Hotel hotelPro = null;
+
+
+        for(Hotel hotel1: hotelesUser){
+            System.out.println("item "+hotel1.getNombre());
+            hotelPro=hotel1;
+        }
 
         String action = (request.getParameter("action") != null) ? request.getParameter("action") : "index";
         
@@ -48,20 +63,22 @@ public class PropietarioController extends HttpServlet {
                 request.getRequestDispatcher("propietario/habitaciones_propietario.jsp").forward(request, response);
                 break;
             case "tipo_habitaciones":
-                request.getRequestDispatcher("propietario/tipo_habitaciones_propietario.jsp").forward(request, response);
+                
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+                    request.setAttribute("tipoHabitaciones", tipoHabitaciones);
+
+                    request.getRequestDispatcher("propietario/tipo_habitaciones_propietario.jsp").forward(request, response);
+                }
                 break;
             case "ofertas":
                 request.getRequestDispatcher("propietario/ofertas_propietario.jsp").forward(request, response);
                 break;
             case "detalle":
-                List<Hotel> hotelesUser = usuario.getHotelList();
-                Hotel hotelPro = null;
-
                 
-                for(Hotel hotel1: hotelesUser){
-                    System.out.println("item "+hotel1.getNombre());
-                    hotelPro=hotel1;
-                }
                 if(hotelPro==null){
                     request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
                 }else{

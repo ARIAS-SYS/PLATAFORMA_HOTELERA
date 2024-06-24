@@ -29,6 +29,7 @@ public class BeanTipoHabitacion {
     public void editar(TipoHabitacion es){
         try {
             jpaTipoHabitacion.edit(es);
+            System.out.println("se modifivco");
         } catch (Exception e) {
             Logger.getLogger(BeanTipoHabitacion.class.getName()).log(Level.SEVERE, null, e);
         }

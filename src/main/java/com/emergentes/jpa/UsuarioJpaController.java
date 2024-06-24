@@ -10,9 +10,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.emergentes.entities.Rol;
-import com.emergentes.entities.Favorito;
+import com.emergentes.entities.TipoHabitacion;
 import java.util.ArrayList;
 import java.util.List;
+import com.emergentes.entities.Favorito;
 import com.emergentes.entities.Hotel;
 import com.emergentes.entities.Reserva;
 import com.emergentes.entities.Usuario;
@@ -36,6 +37,9 @@ public class UsuarioJpaController implements Serializable {
     }
 
     public void create(Usuario usuario) {
+        if (usuario.getTipoHabitacionList() == null) {
+            usuario.setTipoHabitacionList(new ArrayList<TipoHabitacion>());
+        }
         if (usuario.getFavoritoList() == null) {
             usuario.setFavoritoList(new ArrayList<Favorito>());
         }
@@ -54,6 +58,12 @@ public class UsuarioJpaController implements Serializable {
                 idRol = em.getReference(idRol.getClass(), idRol.getId());
                 usuario.setIdRol(idRol);
             }
+            List<TipoHabitacion> attachedTipoHabitacionList = new ArrayList<TipoHabitacion>();
+            for (TipoHabitacion tipoHabitacionListTipoHabitacionToAttach : usuario.getTipoHabitacionList()) {
+                tipoHabitacionListTipoHabitacionToAttach = em.getReference(tipoHabitacionListTipoHabitacionToAttach.getClass(), tipoHabitacionListTipoHabitacionToAttach.getId());
+                attachedTipoHabitacionList.add(tipoHabitacionListTipoHabitacionToAttach);
+            }
+            usuario.setTipoHabitacionList(attachedTipoHabitacionList);
             List<Favorito> attachedFavoritoList = new ArrayList<Favorito>();
             for (Favorito favoritoListFavoritoToAttach : usuario.getFavoritoList()) {
                 favoritoListFavoritoToAttach = em.getReference(favoritoListFavoritoToAttach.getClass(), favoritoListFavoritoToAttach.getId());
@@ -76,6 +86,15 @@ public class UsuarioJpaController implements Serializable {
             if (idRol != null) {
                 idRol.getUsuarioList().add(usuario);
                 idRol = em.merge(idRol);
+            }
+            for (TipoHabitacion tipoHabitacionListTipoHabitacion : usuario.getTipoHabitacionList()) {
+                Usuario oldIdUsuarioOfTipoHabitacionListTipoHabitacion = tipoHabitacionListTipoHabitacion.getIdUsuario();
+                tipoHabitacionListTipoHabitacion.setIdUsuario(usuario);
+                tipoHabitacionListTipoHabitacion = em.merge(tipoHabitacionListTipoHabitacion);
+                if (oldIdUsuarioOfTipoHabitacionListTipoHabitacion != null) {
+                    oldIdUsuarioOfTipoHabitacionListTipoHabitacion.getTipoHabitacionList().remove(tipoHabitacionListTipoHabitacion);
+                    oldIdUsuarioOfTipoHabitacionListTipoHabitacion = em.merge(oldIdUsuarioOfTipoHabitacionListTipoHabitacion);
+                }
             }
             for (Favorito favoritoListFavorito : usuario.getFavoritoList()) {
                 Usuario oldIdUsuarioOfFavoritoListFavorito = favoritoListFavorito.getIdUsuario();
@@ -120,6 +139,8 @@ public class UsuarioJpaController implements Serializable {
             Usuario persistentUsuario = em.find(Usuario.class, usuario.getId());
             Rol idRolOld = persistentUsuario.getIdRol();
             Rol idRolNew = usuario.getIdRol();
+            List<TipoHabitacion> tipoHabitacionListOld = persistentUsuario.getTipoHabitacionList();
+            List<TipoHabitacion> tipoHabitacionListNew = usuario.getTipoHabitacionList();
             List<Favorito> favoritoListOld = persistentUsuario.getFavoritoList();
             List<Favorito> favoritoListNew = usuario.getFavoritoList();
             List<Hotel> hotelListOld = persistentUsuario.getHotelList();
@@ -130,6 +151,13 @@ public class UsuarioJpaController implements Serializable {
                 idRolNew = em.getReference(idRolNew.getClass(), idRolNew.getId());
                 usuario.setIdRol(idRolNew);
             }
+            List<TipoHabitacion> attachedTipoHabitacionListNew = new ArrayList<TipoHabitacion>();
+            for (TipoHabitacion tipoHabitacionListNewTipoHabitacionToAttach : tipoHabitacionListNew) {
+                tipoHabitacionListNewTipoHabitacionToAttach = em.getReference(tipoHabitacionListNewTipoHabitacionToAttach.getClass(), tipoHabitacionListNewTipoHabitacionToAttach.getId());
+                attachedTipoHabitacionListNew.add(tipoHabitacionListNewTipoHabitacionToAttach);
+            }
+            tipoHabitacionListNew = attachedTipoHabitacionListNew;
+            usuario.setTipoHabitacionList(tipoHabitacionListNew);
             List<Favorito> attachedFavoritoListNew = new ArrayList<Favorito>();
             for (Favorito favoritoListNewFavoritoToAttach : favoritoListNew) {
                 favoritoListNewFavoritoToAttach = em.getReference(favoritoListNewFavoritoToAttach.getClass(), favoritoListNewFavoritoToAttach.getId());
@@ -159,6 +187,23 @@ public class UsuarioJpaController implements Serializable {
             if (idRolNew != null && !idRolNew.equals(idRolOld)) {
                 idRolNew.getUsuarioList().add(usuario);
                 idRolNew = em.merge(idRolNew);
+            }
+            for (TipoHabitacion tipoHabitacionListOldTipoHabitacion : tipoHabitacionListOld) {
+                if (!tipoHabitacionListNew.contains(tipoHabitacionListOldTipoHabitacion)) {
+                    tipoHabitacionListOldTipoHabitacion.setIdUsuario(null);
+                    tipoHabitacionListOldTipoHabitacion = em.merge(tipoHabitacionListOldTipoHabitacion);
+                }
+            }
+            for (TipoHabitacion tipoHabitacionListNewTipoHabitacion : tipoHabitacionListNew) {
+                if (!tipoHabitacionListOld.contains(tipoHabitacionListNewTipoHabitacion)) {
+                    Usuario oldIdUsuarioOfTipoHabitacionListNewTipoHabitacion = tipoHabitacionListNewTipoHabitacion.getIdUsuario();
+                    tipoHabitacionListNewTipoHabitacion.setIdUsuario(usuario);
+                    tipoHabitacionListNewTipoHabitacion = em.merge(tipoHabitacionListNewTipoHabitacion);
+                    if (oldIdUsuarioOfTipoHabitacionListNewTipoHabitacion != null && !oldIdUsuarioOfTipoHabitacionListNewTipoHabitacion.equals(usuario)) {
+                        oldIdUsuarioOfTipoHabitacionListNewTipoHabitacion.getTipoHabitacionList().remove(tipoHabitacionListNewTipoHabitacion);
+                        oldIdUsuarioOfTipoHabitacionListNewTipoHabitacion = em.merge(oldIdUsuarioOfTipoHabitacionListNewTipoHabitacion);
+                    }
+                }
             }
             for (Favorito favoritoListOldFavorito : favoritoListOld) {
                 if (!favoritoListNew.contains(favoritoListOldFavorito)) {
@@ -244,6 +289,11 @@ public class UsuarioJpaController implements Serializable {
             if (idRol != null) {
                 idRol.getUsuarioList().remove(usuario);
                 idRol = em.merge(idRol);
+            }
+            List<TipoHabitacion> tipoHabitacionList = usuario.getTipoHabitacionList();
+            for (TipoHabitacion tipoHabitacionListTipoHabitacion : tipoHabitacionList) {
+                tipoHabitacionListTipoHabitacion.setIdUsuario(null);
+                tipoHabitacionListTipoHabitacion = em.merge(tipoHabitacionListTipoHabitacion);
             }
             List<Favorito> favoritoList = usuario.getFavoritoList();
             for (Favorito favoritoListFavorito : favoritoList) {
