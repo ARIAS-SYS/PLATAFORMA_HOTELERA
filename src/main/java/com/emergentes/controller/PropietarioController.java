@@ -40,6 +40,7 @@ public class PropietarioController extends HttpServlet {
         List<TipoHabitacion> tipoHabitaciones = daoTipoHabitacion.listarTodos();
 
         
+        
         List<Hotel> hotelesUser = usuario.getHotelList();
         Hotel hotelPro = null;
 
@@ -60,7 +61,15 @@ public class PropietarioController extends HttpServlet {
                 request.getRequestDispatcher("propietario/reservas_propietario.jsp").forward(request, response);
                 break;
             case "habitaciones":
-                request.getRequestDispatcher("propietario/habitaciones_propietario.jsp").forward(request, response);
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+                    request.setAttribute("tipoHabitaciones", tipoHabitaciones);
+
+                    request.getRequestDispatcher("propietario/habitaciones_propietario.jsp").forward(request, response);
+                }
                 break;
             case "tipo_habitaciones":
                 

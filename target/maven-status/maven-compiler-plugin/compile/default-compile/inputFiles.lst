@@ -13,12 +13,14 @@ E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergen
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\jpa\exceptions\NonexistentEntityException.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\bean\BeanUsuario.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\bean\BeanRol.java
+E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\controller\HabitacionController.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\entities\Hotel.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\jpa\exceptions\IllegalOrphanException.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\jpa\RolJpaController.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\controller\LoginController.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\entities\TipoHabitacion.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\entities\Comodidad.java
+E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\controller\TipoHabitacionController.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\bean\BeanHotel.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\bean\BeanComodidadHabitacion.java
 E:\JAVA_PROYECTOS\jdk-11\PROYECTOS\PLATAFORMA_HOTELERA\src\main\java\com\emergentes\jpa\ComodidadJpaController.java
