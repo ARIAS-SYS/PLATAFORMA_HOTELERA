@@ -74,6 +74,16 @@ public class Oferta implements Serializable {
     private TipoHabitacion idTipoHabitacion;
 
     public Oferta() {
+        this.id = 0;
+        this.titulo = "";
+        this.fechaInicio = new Date();
+        this.fechaFin = new Date();
+        this.descripcion = "";
+        this.estado = "";
+        this.foto = "";
+        this.descuento = 0;
+        this.idHotel = new Hotel();
+        this.idTipoHabitacion = new TipoHabitacion();
     }
 
     public Oferta(Integer id) {
