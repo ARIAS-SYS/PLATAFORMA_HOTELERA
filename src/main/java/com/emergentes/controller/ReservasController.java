@@ -1,10 +1,12 @@
 
 package com.emergentes.controller;
 
+import com.emergentes.bean.BeanHabitacion;
 import com.emergentes.bean.BeanOferta;
 import com.emergentes.bean.BeanReserva;
 import com.emergentes.bean.BeanTipoHabitacion;
 import com.emergentes.bean.BeanUsuario;
+import com.emergentes.entities.Habitacion;
 import com.emergentes.entities.Oferta;
 import com.emergentes.entities.Reserva;
 import com.emergentes.entities.TipoHabitacion;
@@ -37,6 +39,9 @@ public class ReservasController extends HttpServlet {
         BeanReserva daoReserva = new BeanReserva();
         Reserva elemento = new Reserva();
         
+        BeanHabitacion daoHabitacion = new BeanHabitacion();
+        Habitacion habitacion = new Habitacion();
+        
         
         String action = (request.getParameter("action") != null) ? request.getParameter("action") : "view";
         
@@ -46,14 +51,18 @@ public class ReservasController extends HttpServlet {
                 id=Integer.parseInt(request.getParameter("id"));
                 elemento=daoReserva.buscar(id);
                 
+                habitacion=daoHabitacion.buscar(elemento.getIdHabit().getId());
+                
                 if(opcion.equals("reservado")){
                     elemento.setEstado("Reservado");
                 }else if(opcion.equals("estadia")){
                     elemento.setEstado("En Estancia");
+                    habitacion.setEstado("Ocupado");
                 }else if(opcion.equals("completado")){
                     elemento.setEstado("Completado");
                 }
                 daoReserva.editar(elemento);
+                daoHabitacion.editar(habitacion);
                 response.sendRedirect(request.getContextPath()+"/PropietarioController?action=reservas");
                 break;
             

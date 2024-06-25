@@ -1,3 +1,17 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@page import="java.util.Date" %>
+
+<%
+    // Crear una instancia de la fecha actual
+    Date fechaActual = new Date();
+    // Colocar la fecha en el contexto de la página
+    pageContext.setAttribute("fechaActual", fechaActual);
+%>
+
+<fmt:formatDate value="${fechaActual}" pattern="yyyy-MM-dd" var="fechaHoy" />
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -33,7 +47,34 @@
 
                 <!-- resumen -->
                 <div class="flex gap-2 mx-5">
+                    
+                    <c:set var="reserAct" value="0" />
+                    <c:set var="reserDia" value="0" />
+                    <c:set var="cantHab" value="0" />
+                    <c:set var="porHab" value="0" />
+                    <c:set var="canHue" value="0" />
 
+                    <c:forEach var="item" items="${reservas}">
+                        <c:if test="${hotel.id==item.idHabit.idHotelHab.id}">
+                            <c:if test="${item.estado=='Reservado'}">
+                                <c:set var="reserAct" value="${reserAct+1}" />
+                            </c:if>
+                            <c:if test="${item.estado=='Reservado' && item.fechaReserva==fechaHoy}">
+                                <c:set var="reserDia" value="${reserDia+1}" />
+                            </c:if>
+                        </c:if>
+
+                    </c:forEach>
+                    
+                    <c:forEach var="hab" items="${hotel.habitacionList}">
+                        <c:set var="cantHab" value="${cantHab+1}" />
+                        <c:if test="${hab.estado=='Ocupado'}">
+                            <c:set var="porHab" value="${porHab+1}" />
+                            <c:set var="canHue" value="${canHue+hab.capacidad}" />
+                            
+                        </c:if>
+                    </c:forEach>
+                    
                     <!-- card -->
                     <div class="h-[8rem] bg-[#8F9EB31C] flex-1 p-5 flex justify-between">
                         <div class="flex h-full flex-col justify-between">
@@ -41,7 +82,7 @@
                                 Reservas Actuales
                             </h3>
                             <span class="text-white font-bold text-2xl">
-                                12
+                                ${reserAct}
                             </span>
                         </div>
                         <div>
@@ -60,7 +101,7 @@
                                 Reservas de Día
                             </h3>
                             <span class="text-white font-bold text-2xl">
-                                12
+                                ${reserDia}
                             </span>
                         </div>
                         <div>
@@ -79,7 +120,8 @@
                                 Habitaciones Ocupadas
                             </h3>
                             <span class="text-white font-bold text-2xl">
-                                12%
+                                <c:set var="porcentajeOcupacion" value="${(porHab / cantHab) * 100}" />
+                                ${porcentajeOcupacion}%
                             </span>
                         </div>
                         <div>
@@ -99,7 +141,7 @@
                                 Número de Huespedes
                             </h3>
                             <span class="text-white font-bold text-2xl">
-                                12
+                                ${canHue}
                             </span>
                         </div>
                         <div>

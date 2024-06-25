@@ -62,8 +62,16 @@ public class PropietarioController extends HttpServlet {
         
         switch(action){
             case "home":
-                request.setAttribute("usuario", usuario);
-                request.getRequestDispatcher("propietario/home_propietario.jsp").forward(request, response);
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    
+                    request.setAttribute("reservas", reservas);
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+                    
+                    request.getRequestDispatcher("propietario/home_propietario.jsp").forward(request, response);
+                }
                 break;
             case "reservas":
                 if(hotelPro==null){
