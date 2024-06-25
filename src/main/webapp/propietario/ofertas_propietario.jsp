@@ -92,7 +92,7 @@
                                             <fmt:formatDate value="${oferta.fechaFin}" pattern="MMMM" />
                                         </span>
                                         <div class="flex justify-end mt-3">
-                                            <c:if test="${oferta.estado=='Completado'}">
+                                            <c:if test="${oferta.estado=='Terminado'}">
                                                 <span class="inline-block rounded-full my-2 sm:my-0 py-1 sm:py-0 px-3 text-white bg-purple-700">
                                                     Completado
                                                 </span>

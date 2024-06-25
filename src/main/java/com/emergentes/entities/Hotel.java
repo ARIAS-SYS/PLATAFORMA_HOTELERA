@@ -5,6 +5,7 @@
 package com.emergentes.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -104,6 +105,25 @@ public class Hotel implements Serializable {
     private List<Habitacion> habitacionList;
 
     public Hotel() {
+        
+        this.id = 0;
+        this.nombre = "";
+        this.descripcion = "";
+        this.celular = 0;
+        this.facebook = "";
+        this.instagram = "";
+        this.foto = "";
+        this.linkUbicacion = "";
+        this.pais = "";
+        this.departamento = "";
+        this.ciudad = "";
+        this.descripcionUbi = "";
+        this.calificacion = 0L;
+        this.favoritoList = new ArrayList<Favorito>();
+        this.ofertaList = new ArrayList<Oferta>();
+        this.idUser = new Usuario();
+        this.habitacionList = new ArrayList<Habitacion>();
+        
     }
 
     public Hotel(Integer id) {

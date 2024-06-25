@@ -2,9 +2,11 @@
 package com.emergentes.controller;
 
 import com.emergentes.bean.BeanHotel;
+import com.emergentes.bean.BeanReserva;
 import com.emergentes.bean.BeanTipoHabitacion;
 import com.emergentes.bean.BeanUsuario;
 import com.emergentes.entities.Hotel;
+import com.emergentes.entities.Reserva;
 import com.emergentes.entities.TipoHabitacion;
 import com.emergentes.entities.Usuario;
 import java.io.File;
@@ -36,8 +38,14 @@ public class PropietarioController extends HttpServlet {
         usuario=daoUsuario.buscar(usuario.getId());
         session.setAttribute("usuario", usuario);
         
+        usuario = (Usuario) session.getAttribute("usuario");
+
+        
         BeanTipoHabitacion daoTipoHabitacion = new BeanTipoHabitacion();
         List<TipoHabitacion> tipoHabitaciones = daoTipoHabitacion.listarTodos();
+        
+        BeanReserva daoReserva = new BeanReserva();
+        List<Reserva> reservas = daoReserva.listarTodos();
 
         
         
@@ -58,7 +66,52 @@ public class PropietarioController extends HttpServlet {
                 request.getRequestDispatcher("propietario/home_propietario.jsp").forward(request, response);
                 break;
             case "reservas":
-                request.getRequestDispatcher("propietario/reservas_propietario.jsp").forward(request, response);
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    
+                    request.setAttribute("reservas", reservas);
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+                    
+                    request.getRequestDispatcher("propietario/reservas_propietario.jsp").forward(request, response);
+                }
+                break;
+            case "reservasEstadia":
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("reservas", reservas);
+
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+                    
+                    request.getRequestDispatcher("propietario/reservas_estadia.jsp").forward(request, response);
+                }
+                break;
+            case "reservasCompleto":
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("reservas", reservas);
+
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+                    
+                    request.getRequestDispatcher("propietario/reservas_completado.jsp").forward(request, response);
+                }
+                break;
+            case "reservasTodos":
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("reservas", reservas);
+
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+                    
+                    request.getRequestDispatcher("propietario/reservas_todos.jsp").forward(request, response);
+                }
                 break;
             case "habitaciones":
                 if(hotelPro==null){
@@ -87,6 +140,11 @@ public class PropietarioController extends HttpServlet {
                 if(hotelPro==null){
                     request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
                 }else{
+                    usuario=daoUsuario.buscar(usuario.getId());
+                    session.setAttribute("usuario", usuario);
+                    
+                    usuario = (Usuario) session.getAttribute("usuario");
+
                     request.setAttribute("hotel", hotelPro);
                     request.setAttribute("usuario", usuario);
 

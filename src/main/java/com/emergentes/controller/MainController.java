@@ -40,6 +40,19 @@ public class MainController extends HttpServlet {
         
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (session != null) {
+            usuario = (Usuario) session.getAttribute("usuario");
+
+            if (usuario != null && "OK".equals(session.getAttribute("login"))) {
+                System.out.println("hay sesion");
+                BeanUsuario daoUsuario = new BeanUsuario();      
+                usuario=daoUsuario.buscar(usuario.getId());
+                session.setAttribute("usuario", usuario);
+            } else {
+                System.out.println("no hay sesion");
+            }
+        }
         
 
         int id;
@@ -119,6 +132,10 @@ public class MainController extends HttpServlet {
                     
                     boolean isCliente = true;
                     Usuario usuario = (Usuario) session.getAttribute("usuario");
+                    
+                    BeanUsuario daoUsuario = new BeanUsuario();      
+                    usuario=daoUsuario.buscar(usuario.getId());
+                    session.setAttribute("usuario", usuario);
            
                     
                     if(usuario.getIdRol().getId()==2){
@@ -154,6 +171,9 @@ public class MainController extends HttpServlet {
 
                 Usuario usuario = (Usuario) session.getAttribute("usuario");
                 
+                BeanUsuario daoUsuario = new BeanUsuario();      
+                usuario=daoUsuario.buscar(usuario.getId());
+                session.setAttribute("usuario", usuario);
 
         
                 int itemId = Integer.parseInt(request.getParameter("hotelId"));

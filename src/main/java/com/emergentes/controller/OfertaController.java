@@ -38,6 +38,15 @@ public class OfertaController extends HttpServlet {
         usuario=daoUsuario.buscar(usuario.getId());
         session.setAttribute("usuario", usuario);
         
+        List<Hotel> hotelesUser = usuario.getHotelList();
+        Hotel hotelPro = null;
+
+
+        for(Hotel hotel1: hotelesUser){
+            System.out.println("item "+hotel1.getNombre());
+            hotelPro=hotel1;
+        }
+        
         
         
         
@@ -67,7 +76,14 @@ public class OfertaController extends HttpServlet {
 
                 break;
             case "view":
-                response.sendRedirect(request.getContextPath()+"/PropietarioController?action=ofertas");
+                if(hotelPro==null){
+                    request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("hotel", hotelPro);
+                    request.setAttribute("usuario", usuario);
+
+                    request.getRequestDispatcher("propietario/ofertas_propietario.jsp").forward(request, response);
+                }
 
                 break;
         }
