@@ -62,6 +62,7 @@ public class PropietarioController extends HttpServlet {
         
         switch(action){
             case "home":
+                
                 if(hotelPro==null){
                     request.getRequestDispatcher("propietario/nuevo_hotel.jsp").forward(request, response);
                 }else{
@@ -69,6 +70,7 @@ public class PropietarioController extends HttpServlet {
                     request.setAttribute("reservas", reservas);
                     request.setAttribute("hotel", hotelPro);
                     request.setAttribute("usuario", usuario);
+                    request.setAttribute("tipoHabitaciones", tipoHabitaciones);
                     
                     request.getRequestDispatcher("propietario/home_propietario.jsp").forward(request, response);
                 }

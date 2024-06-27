@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +41,8 @@ public class MainController extends HttpServlet {
         
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
+        
+        
 
         if (session != null) {
             usuario = (Usuario) session.getAttribute("usuario");
@@ -61,7 +64,36 @@ public class MainController extends HttpServlet {
         Hotel hotel = new Hotel();
         
         BeanOferta daoOferta = new BeanOferta();
+        List<Oferta> ofertas = daoOferta.listarTodos();
+        
+        BeanReserva daoReserva = new BeanReserva();
+        List<Reserva> reservas = daoReserva.listarTodos();
+        
+
         Oferta oferta = new Oferta();
+        
+        
+        // Fecha actual
+        Date fechaActual = new Date();
+
+        // Actualizar estado de las reservas
+        for (Oferta of : ofertas) {
+            if (fechaActual.before(of.getFechaInicio())) {
+                of.setEstado("Programado");
+            } else if (fechaActual.after(of.getFechaFin())) {
+                of.setEstado("Terminado");
+            } else {
+                of.setEstado("En Curso");
+            }
+            
+            daoOferta.editar(of);
+        }
+        
+        
+        ofertas = daoOferta.listarTodos();
+
+        
+        
         
         BeanHabitacion daoHabitacion = new BeanHabitacion();
         Habitacion habitacion = new Habitacion();
@@ -71,7 +103,6 @@ public class MainController extends HttpServlet {
         switch(action){
             case "index":
                 List<Hotel> hoteles = daoHotel.listarTodos();
-                List<Oferta> ofertas = daoOferta.listarTodos();
                 request.setAttribute("hoteles", hoteles);
                 request.setAttribute("ofertas", ofertas);
                 request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -125,6 +156,11 @@ public class MainController extends HttpServlet {
 
         HttpSession session = request.getSession();
         String action = request.getParameter("action");
+        
+        BeanHabitacion daoHabitacion = new BeanHabitacion();
+        BeanReserva daoReserva = new BeanReserva();
+
+
                 
         switch(action){
             case "sessionExist":
@@ -233,8 +269,6 @@ public class MainController extends HttpServlet {
                 
 
                 
-                BeanReserva daoReserva = new BeanReserva();
-                BeanHabitacion daoHabitacion = new BeanHabitacion();
                 Habitacion habitacion = daoHabitacion.buscar(habitacionId);
                 
                 System.out.println("usuario "+ usuario1.getNombre());
@@ -270,6 +304,46 @@ public class MainController extends HttpServlet {
                 out1.flush();
 
                 
+                break;
+                
+            case "buscar":
+                
+                System.out.println("dentro de buscar");
+                String ubicacion = request.getParameter("ubicacion");
+                String fecha = request.getParameter("fecha");
+                int persona = Integer.parseInt(request.getParameter("persona")) ;
+                
+                String[] partes = ubicacion.split(",\\s*");
+
+                String ciudad = partes[0];        // "El Alto"
+                String departamento = partes[1];  // "La Paz"
+                String pais = partes[2];          // "Bolivia"
+
+                
+                
+                
+                
+                List<Habitacion> habitacionesList = daoHabitacion.listarTodos();
+                System.out.println("lista de habitaciones");
+                
+                List<Habitacion> respuesta = new ArrayList<Habitacion>();
+                
+                for(Habitacion hab: habitacionesList){
+                    if(
+                            hab.getIdHotelHab().getPais().equals(pais) &&
+                            hab.getIdHotelHab().getDepartamento().equals(departamento) &&
+                            hab.getIdHotelHab().getCiudad().equals(ciudad) && 
+                            hab.getEstado().equals("Libre") && 
+                            hab.getCapacidad()== persona
+                            ){
+                        respuesta.add(hab);
+                    }
+                }
+                
+                request.setAttribute("respuesta", respuesta);
+                request.setAttribute("ultimo", ubicacion);
+
+                request.getRequestDispatcher("inicio/buscador.jsp").forward(request, response);
                 break;
         }
 

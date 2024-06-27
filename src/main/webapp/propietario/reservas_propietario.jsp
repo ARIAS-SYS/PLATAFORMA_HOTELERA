@@ -80,10 +80,11 @@
                             <th class="py-3 pl-2 text-left">Id</th>
                             <th class="text-center">Imagen</th>
                             <th class="text-left">Cliente</th>
+                            <th class="text-left">Fecha</th>
                             <th class="text-left">Precio</th>
                             <th class="text-left">Habitación</th>
                             <th class="text-left">Estado</th>
-                            <th class="text-left">Fechas</th>
+                            <th class="text-left">Dias</th>
                             <th class="text-center">Actualizar</th>
                         </tr>
                         <c:forEach var="reserva" items="${reservas}">
@@ -94,6 +95,9 @@
                                         <img class="rounded-full w-20 h-20 object-cover object-center my-1 mx-auto" src="${reserva.idHabit.idTipoHab.foto}"  alt="">
                                     </td>
                                     <td>${reserva.idUsuario.nombre}</td>
+                                    <td>
+                                        <fmt:formatDate value="${reserva.fechaReserva}" pattern="dd-MM-yyyy" />
+                                    </td>
                                     <td>${reserva.totalPrecio} Bs.</td>
                                     <td>${reserva.idHabit.idTipoHab.tipo}</td>
                                     <td>

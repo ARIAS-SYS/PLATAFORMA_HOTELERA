@@ -127,18 +127,29 @@ public class OfertaController extends HttpServlet {
         
         elemento=daoTipoHabitacion.buscar(tipo);
         
-       
+        
                     
         oferta.setId(id);
         oferta.setTitulo(nombre);
         oferta.setDescripcion(descripcion);
         oferta.setFoto(foto);
-        oferta.setEstado("Programado");
         oferta.setFechaInicio(convertirFecha(fecha_inicio));
         oferta.setFechaFin(convertirFecha(fecha_fin));
         oferta.setDescuento(descuento);
         oferta.setIdHotel(hotelPro);
         oferta.setIdTipoHabitacion(elemento);
+        
+        java.util.Date fechaActual = new java.util.Date();
+        
+        if (fechaActual.before(oferta.getFechaInicio())) {
+            oferta.setEstado("Programado");
+
+        } else if (fechaActual.after(oferta.getFechaFin())) {
+            oferta.setEstado("Terminado");
+        } else {
+            oferta.setEstado("En Curso");
+        }
+            
         
         
         if(id==0){

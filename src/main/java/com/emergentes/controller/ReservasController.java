@@ -60,6 +60,7 @@ public class ReservasController extends HttpServlet {
                     habitacion.setEstado("Ocupado");
                 }else if(opcion.equals("completado")){
                     elemento.setEstado("Completado");
+                    habitacion.setEstado("Libre");
                 }
                 daoReserva.editar(elemento);
                 daoHabitacion.editar(habitacion);

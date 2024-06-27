@@ -1,5 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 
 <%@page import="java.util.Date" %>
 
@@ -33,8 +35,9 @@
 
 
 </head>
-<body class="bg-[#0F1522]">
 
+<body class="bg-[#0F1522]">
+    
     <div class="flex h-screen">
                 
         <jsp:include page="../layout/sidebar_propietario.jsp" />
@@ -120,8 +123,14 @@
                                 Habitaciones Ocupadas
                             </h3>
                             <span class="text-white font-bold text-2xl">
-                                <c:set var="porcentajeOcupacion" value="${(porHab / cantHab) * 100}" />
-                                ${porcentajeOcupacion}%
+                                <c:if test="${cantHab==0}">
+                                    <c:set var="porcentajeOcupacion" value="S/H" />
+                                    ${porcentajeOcupacion}
+                                </c:if>
+                                <c:if test="${cantHab>0}">                                    
+                                    <c:set var="porcentajeOcupacion" value="${(porHab / cantHab) * 100}" />
+                                    ${porcentajeOcupacion}%
+                                </c:if>
                             </span>
                         </div>
                         <div>
@@ -179,7 +188,8 @@
                         <!-- grafico lineal  -->
                         <div class="py-6" id="pie-chart"></div>
                     </div>
-
+                    
+                    
                 </div>
 
             </main>
@@ -193,14 +203,100 @@
 
     <!-- apex char -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+    <c:set var="fechasString" value="" />
+    <c:set var="cantidadesString" value="" />
+    <c:set var="huespedesString" value="" />
+
+    <c:forEach var="reserva" items="${reservas}">
+        <c:if test="${hotel.id==reserva.idHabit.idHotelHab.id}">
+
+
+            <c:set var="fechaReserva" value="${reserva.fechaReserva}"/>
+
+            <fmt:formatDate var="fechaFormateada" value="${fechaReserva}" pattern="dd-MM" />
+
+            <!-- Verificar si la fecha ya está en fechasString -->
+            <c:if test="${fn:indexOf(fechasString, fechaFormateada) eq -1}">
+                <!-- Conteo de reservas para la fecha actual -->
+                <c:set var="cantidad" value="0"/>
+                <c:set var="hues" value="0"/>
+                <c:forEach var="otraReserva" items="${reservas}">
+                    <c:if test="${fechaReserva == otraReserva.fechaReserva}">
+                        <c:set var="cantidad" value="${cantidad + 1}"/>
+                        <c:set var="hues" value="${hues + otraReserva.idHabit.capacidad}"/>
+                    </c:if>
+                </c:forEach>
+
+                <!-- Construcción de las cadenas -->
+                <c:set var="fechasString" value="${fechasString}${fechaFormateada},"/>
+                <c:set var="cantidadesString" value="${cantidadesString}${cantidad},"/>
+                <c:set var="huespedesString" value="${huespedesString}${hues},"/>
+            </c:if>
+        </c:if>
+    </c:forEach>
+
+    <!-- Eliminar la última coma de cada cadena si es necesario -->
+    <c:set var="fechasString" value="${fn:substring(fechasString, 0, fn:length(fechasString) - 1)}"/>
+    <c:set var="cantidadesString" value="${fn:substring(cantidadesString, 0, fn:length(cantidadesString) - 1)}"/>
+    <c:set var="huespedesString" value="${fn:substring(huespedesString, 0, fn:length(huespedesString) - 1)}"/>
+
+    <c:set var="tipoHabString" value="" />
+    <c:set var="cantReservasString" value="" />
+
+    <c:forEach var="reserva" items="${reservas}">
+        <c:if test="${hotel.id == reserva.idHabit.idHotelHab.id}">
+            <c:set var="tipoHab" value="${reserva.idHabit.idTipoHab.id}" />
+            <c:set var="tipoHabNom" value="${reserva.idHabit.idTipoHab.tipo}" />
+
+            <!-- Verificar si el tipo de habitación ya está en tipoHabString -->
+            <c:if test="${fn:indexOf(tipoHabString, tipoHab) eq -1}">
+                <!-- Conteo de reservas para el tipo de habitación actual -->
+                <c:set var="cantidadReservas" value="0"/>
+                <c:forEach var="otraReserva" items="${reservas}">
+                    <c:if test="${reserva.idHabit.idTipoHab.id == otraReserva.idHabit.idTipoHab.id}">
+                        <c:set var="cantidadReservas" value="${cantidadReservas + 1}"/>
+                    </c:if>
+                </c:forEach>
+
+                <!-- Construcción de las cadenas -->
+                <c:set var="tipoHabString" value="${tipoHabString}${tipoHab},"/>
+                <c:set var="cantReservasString" value="${cantReservasString}${cantidadReservas},"/>
+            </c:if>
+        </c:if>
+    </c:forEach>
+
+    <!-- Eliminar la última coma de cada cadena si es necesario -->
+    <c:set var="tipoHabString" value="${fn:substring(tipoHabString, 0, fn:length(tipoHabString) - 1)}"/>
+    <c:set var="cantReservasString" value="${fn:substring(cantReservasString, 0, fn:length(cantReservasString) - 1)}"/>
+
+    
+    <c:set var="nombresString" value="" />
+    
+    <c:set var="idsList" value="${fn:split(tipoHabString, ',')}" />
+    
+    <c:forEach var="id" items="${idsList}">
+        <c:forEach var="tipo" items="${tipoHabitaciones}">
+            <c:if test="${tipo.id == id}">
+                <c:set var="nombresString" value="${nombresString}${tipo.tipo}," />
+            </c:if>
+        </c:forEach>
+    </c:forEach>
+    
+    <c:set var="nombresString" value="${fn:substring(nombresString, 0, fn:length(nombresString) - 1)}" />
+
+    
 
     <!-- cral circle -->
     <script>
         
+        let tipoHabString="<c:out value="${nombresString}" />";
+        let cantReservasString=[<c:out value="${cantReservasString}" />];
+        
         const getChartOptions = () => {
             return {
-                series: [52.8, 26.8, 10.4, 10],
-                colors: ["#1C64F2", "#16BDCA", "#9061F9", "#ff0000"],
+                series: cantReservasString,
+                colors: ["#1C64F2", "#ff0000", "#16BDCA", "#FFA500", "#9061F9", "#00FF00", "#FF1493", "#00FFFF", "#FFD700", "#8A2BE2", "#32CD32", "#FF4500", "#9932CC", "#008080", "#FF69B4"],
                 chart: {
                 height: 420,
                 width: "100%",
@@ -221,7 +317,7 @@
                     }
                 },
                 },
-                labels: ["Habitacion Estandar", "Suit", "Habitación Familiar", "Habitación Ejecutiva"],
+                labels: tipoHabString.split(",").map(s => s.trim()),
                 dataLabels: {
                 enabled: true,
                 style: {
@@ -235,14 +331,14 @@
                 yaxis: {
                 labels: {
                     formatter: function (value) {
-                    return value + "%"
+                    return value + " reservas"
                     },
                 },
                 },
                 xaxis: {
                 labels: {
                     formatter: function (value) {
-                    return value  + "%"
+                    return value  + " reservas"
                     },
                 },
                 axisTicks: {
@@ -264,6 +360,10 @@
 
     <!-- char lineal -->
     <script>
+        
+        let stringFecha="<c:out value="${fechasString}" />";
+        let cantF=[<c:out value="${cantidadesString}" />];
+        let cantH=[<c:out value="${huespedesString}" />];
         
         const options = {
             chart: {
@@ -302,12 +402,12 @@
             series: [
                 {
                 name: "Reservas",
-                data: [0, 0, 0, 6526, 6356, 6456],
+                data: cantF,
                 color: "#1A56DB",
                 },
                 {
                 name: "Huespedes",
-                data: [0, 6356, 6526, 6332, 6418, 6500],
+                data: cantH,
                 color: "#7E3AF2",
                 },
             ],
@@ -318,7 +418,7 @@
                 curve: 'smooth'
             },
             xaxis: {
-                categories: ['Enero', 'Febrero', 'Marzo', 'Abril', '05 Feb', '06 Feb', '07 Feb'],
+                categories: stringFecha.split(",").map(s => s.trim()),
                 labels: {
                 show: true,
                 style: {
@@ -344,6 +444,8 @@
         }
 
     </script>
+    
+    
 
 </body>
 </html>
