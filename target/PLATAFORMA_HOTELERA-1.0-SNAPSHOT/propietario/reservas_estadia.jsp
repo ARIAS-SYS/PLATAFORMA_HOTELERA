@@ -131,7 +131,14 @@
         </div>
 
     </div>
+        
+    <div id="estadoModal" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+        <ul id="modalOptions" class="py-2 text-sm text-gray-700 dark:text-gray-200">
+            <!-- Opciones se llenarán dinámicamente con JavaScript -->
+        </ul>
+    </div>
     
+    <script src="${pageContext.request.contextPath}/js/estadoModal.js" type="text/javascript"></script>
 
     <!-- flowbite -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>

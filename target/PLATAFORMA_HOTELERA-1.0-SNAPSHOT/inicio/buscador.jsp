@@ -179,7 +179,7 @@
                                 <div class="text-[#95989F] text-sm sm:flex gap-2 mb-5">
                                     <div class="flex gap-2">
                                       <strike>Bs. ${habitacion.precio}</strike>                  
-                                      <span class="text-[#f4b848] text-sm font-bold"> Bs. ${item.precio - (item.precio * (descuento/100))}</span><br>
+                                      <span class="text-[#f4b848] text-sm font-bold"> Bs. ${habitacion.precio - (habitacion.precio * (descuento/100))}</span><br>
                                     </div>
                                     <span class="inline-block rounded-full my-2 sm:my-0 py-1 sm:py-0 px-1 text-white bg-[#FE0000]">${descuento}% de descuento</span>
                                 </div>
