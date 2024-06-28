@@ -1,4 +1,4 @@
-# **PLATAFROMA INTEGRADA DE HOTELES**
+# **PLATAFROMA DE RESERVAS INTEGRADA DE HOTELES**
 
 
 Video en  [YouTube](https://youtu.be/fbIfG38jAX8?si=UkbUaM0odytwy1Et)
